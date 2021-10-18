@@ -2,6 +2,8 @@ package io.getstream.feed
 
 object Versions {
     internal const val ANDROID_GRADLE_PLUGIN = "7.0.3"
+    internal const val DOKKA = "1.5.0"
+    internal const val GRADLE_NEXUS_PUBLISH_PLUGIN = "1.1.0"
     internal const val GRADLE_VERSIONS_PLUGIN = "0.39.0"
     internal const val KOTLIN = "1.5.31"
     internal const val KTLINT_PLUGIN = "10.2.0"
@@ -9,6 +11,8 @@ object Versions {
 
 object Dependencies {
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.ANDROID_GRADLE_PLUGIN}"
+    const val dokka = "org.jetbrains.dokka:dokka-gradle-plugin:${Versions.DOKKA}"
+    const val gradleNexusPublishPlugin = "io.github.gradle-nexus:publish-plugin:${Versions.GRADLE_NEXUS_PUBLISH_PLUGIN}"
     const val gradleVersionsPlugin = "com.github.ben-manes:gradle-versions-plugin:${Versions.GRADLE_VERSIONS_PLUGIN}"
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.KOTLIN}"
     const val ktlintPlugin = "org.jlleitschuh.gradle:ktlint-gradle:${Versions.KTLINT_PLUGIN}"

@@ -1,7 +1,17 @@
+import io.getstream.feed.Configuration
+
 plugins {
     id 'java-library'
     id 'kotlin'
 }
+
+ext {
+    PUBLISH_GROUP_ID = Configuration.artifactGroup
+    PUBLISH_ARTIFACT_ID = 'stream-feed-client'
+    PUBLISH_VERSION = rootVersionName
+}
+
+apply from: "${rootDir}/scripts/publish-module.gradle"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
