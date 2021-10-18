@@ -1,4 +1,5 @@
 import io.getstream.feed.Configuration
+import io.getstream.feed.Dependencies
 
 plugins {
     id 'java-library'
@@ -16,4 +17,21 @@ apply from: "${rootDir}/scripts/publish-module.gradle"
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
+}
+
+dependencies {
+    testImplementation Dependencies.junitJupiterApi
+    testImplementation Dependencies.junitJupiterParams
+    testRuntimeOnly Dependencies.junitJupiterEngine
+
+    testImplementation Dependencies.kluent
+    testImplementation Dependencies.mockito
+    testImplementation Dependencies.mockitoKotlin
 }
