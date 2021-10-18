@@ -24,11 +24,14 @@ jobs:
         with:
           distribution: adopt
           java-version: 11
+      - uses: ./.github/actions/gradle-cache
+        with:
+          key-prefix: gradle-ktlintCheck
       - name: ktlint
         run: ./gradlew ktlintCheck --scan
 
   build:
-    name: Debug build
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -38,6 +41,9 @@ jobs:
         with:
           distribution: adopt
           java-version: 11
+      - uses: ./.github/actions/gradle-cache
+        with:
+          key-prefix: gradle-assemble
       - name: Build
         run: ./gradlew assemble --scan
 
@@ -52,6 +58,9 @@ jobs:
         with:
           distribution: adopt
           java-version: 11
+      - uses: ./.github/actions/gradle-cache
+        with:
+          key-prefix: gradle-test
       - name: Unit tests
         run: ./gradlew test --stacktrace --scan
       - name: Upload testDebugUnitTest results
