@@ -27,8 +27,12 @@ test {
 }
 
 dependencies {
+    implementation Dependencies.retrofit
+    implementation Dependencies.okhttpLoggingInterceptor
+
     testImplementation Dependencies.junitJupiterApi
     testImplementation Dependencies.junitJupiterParams
+
     testRuntimeOnly Dependencies.junitJupiterEngine
 
     testImplementation Dependencies.kluent
