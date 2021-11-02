@@ -4,6 +4,7 @@ import io.getstream.feed.Dependencies
 plugins {
     id 'java-library'
     id 'kotlin'
+    id 'kotlin-kapt'
 }
 
 ext {
@@ -28,6 +29,12 @@ test {
 
 dependencies {
     implementation Dependencies.coroutinesCore
+    implementation Dependencies.moshi
+    implementation Dependencies.moshiAdapters
+
+    kapt Dependencies.moshiCodegen
+
+    implementation Dependencies.retrofitMoshiConverter
     implementation Dependencies.retrofit
     implementation Dependencies.okhttpLoggingInterceptor
 

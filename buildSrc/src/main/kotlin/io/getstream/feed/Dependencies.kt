@@ -13,6 +13,7 @@ object Versions {
     internal const val KTLINT_PLUGIN = "10.2.0"
     internal const val MOCKITO = "4.0.0"
     internal const val MOCKITO_KOTLIN = "2.2.0"
+    internal const val MOSHI = "1.12.0"
     internal const val OKHTTP = "4.9.2"
     internal const val RETROFIT = "2.9.0"
 }
@@ -34,8 +35,12 @@ object Dependencies {
     const val ktlintPlugin = "org.jlleitschuh.gradle:ktlint-gradle:${Versions.KTLINT_PLUGIN}"
     const val mockito = "org.mockito:mockito-core:${Versions.MOCKITO}"
     const val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:${Versions.MOCKITO_KOTLIN}"
+    const val moshi = "com.squareup.moshi:moshi:${Versions.MOSHI}"
+    const val moshiAdapters = "com.squareup.moshi:moshi-adapters:${Versions.MOSHI}"
+    const val moshiCodegen = "com.squareup.moshi:moshi-kotlin-codegen:${Versions.MOSHI}"
     const val okhttpLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.OKHTTP}"
     const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.RETROFIT}"
+    const val retrofitMoshiConverter = "com.squareup.retrofit2:converter-moshi:${Versions.RETROFIT}"
 
     @JvmStatic
     fun isNonStable(version: String): Boolean = isStable(version).not()
