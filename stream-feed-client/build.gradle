@@ -37,6 +37,7 @@ dependencies {
     implementation Dependencies.retrofitMoshiConverter
     implementation Dependencies.retrofit
     implementation Dependencies.okhttpLoggingInterceptor
+    implementation Dependencies.ok2curl
 
     testImplementation Dependencies.junitJupiterApi
     testImplementation Dependencies.junitJupiterParams
