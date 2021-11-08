@@ -1,9 +1,15 @@
 package io.getstream.feed.client
 
+import io.getstream.feed.client.internal.api.models.ActivitiesRequest
 import io.getstream.feed.client.internal.api.models.ActorDto
 import io.getstream.feed.client.internal.api.models.DownstreamActivityDto
 import io.getstream.feed.client.internal.api.models.DownstreamEnrichActivityDto
+import io.getstream.feed.client.internal.api.models.UpdateActivitiesRequest
+import io.getstream.feed.client.internal.api.models.UpdateActivityByForeignIdRequest
+import io.getstream.feed.client.internal.api.models.UpdateActivityByIdRequest
+import io.getstream.feed.client.internal.api.models.UpdateActivityRequest
 import io.getstream.feed.client.internal.api.models.UpstreamActivityDto
+import io.getstream.feed.client.internal.api.models.UpstreamActivitySealedDto
 import io.getstream.feed.client.internal.api.models.UpstreamEnrichActivityDto
 
 internal object JSONMother {
@@ -19,7 +25,7 @@ internal object JSONMother {
                 },
             ${extraDataJsonString ?: ""} 
             }
-    """.trimIndent().replace(",\n \n}", "}")
+    """.trimIndent().sanitizeJson()
 
     fun UpstreamActivityDto.toJsonString(extraDataJsonString: String? = null): String = """
         {
@@ -32,7 +38,7 @@ internal object JSONMother {
         ${foreignId?.let { "\"foreign_id\" : \"$it\","} ?: ""}
         ${extraDataJsonString ?: ""} 
         }
-    """.trimIndent().replace(",\n \n}", "}")
+    """.trimIndent().sanitizeJson()
 
     fun DownstreamActivityDto.toJsonString(extraDataJsonString: String? = null): String = """
         {
@@ -46,7 +52,7 @@ internal object JSONMother {
         ${foreignId?.let { "\"foreign_id\" : \"$it\","} ?: ""}
         ${extraDataJsonString ?: ""} 
         }
-    """.trimIndent().replace(",\n \n}", "}")
+    """.trimIndent().sanitizeJson()
 
     fun UpstreamEnrichActivityDto.toJsonString(extraDataJsonString: String? = null): String = """
         {
@@ -59,7 +65,7 @@ internal object JSONMother {
         ${foreignId?.let { "\"foreign_id\" : \"$it\","} ?: ""}
         ${extraDataJsonString ?: ""} 
         }
-    """.trimIndent().replace(",\n \n}", "}")
+    """.trimIndent().sanitizeJson()
 
     fun DownstreamEnrichActivityDto.toJsonString(extraDataJsonString: String? = null): String = """
         {
@@ -73,7 +79,52 @@ internal object JSONMother {
         ${foreignId?.let { "\"foreign_id\" : \"$it\","} ?: ""}
         ${extraDataJsonString ?: ""} 
         }
-    """.trimIndent().replace(",\n \n}", "}")
+    """.trimIndent().sanitizeJson()
+
+    fun UpdateActivityByIdRequest.toJsonString(setJsonString: String? = null): String = """
+        {
+        "id": "$id",
+        "set": ${setJsonString ?: "{}"},
+        "unset": ${unset.toJsonArrayString { "\"$it\"" }}
+        }
+    """.trimIndent()
+
+    fun UpdateActivityByForeignIdRequest.toJsonString(setJsonString: String? = null): String = """
+        {
+        "foreign_id": "$foreignId",
+        "time": "$time",
+        "set": ${setJsonString ?: "{}"},
+        "unset": ${unset.toJsonArrayString { "\"$it\"" }}
+        }
+    """.trimIndent()
+
+    fun UpdateActivityRequest.toJsonString(): String = when (this) {
+        is UpdateActivityByForeignIdRequest -> this.toJsonString()
+        is UpdateActivityByIdRequest -> this.toJsonString()
+    }
+
+    fun UpstreamActivitySealedDto.toJsonString(): String = when (this) {
+        is UpstreamActivityDto -> this.toJsonString()
+        is UpstreamEnrichActivityDto -> this.toJsonString()
+    }
+
+    fun UpdateActivitiesRequest.toJsonString(): String = """
+        {
+        "changes": ${udpates.toJsonArrayString { it.toJsonString() }}
+        }
+    """.trimIndent()
+
+    fun ActivitiesRequest.toJsonString(): String = """
+        {
+        "activities": ${activities.toJsonArrayString { it.toJsonString() }}
+        }
+    """.trimIndent().also {
+        println("JcLog: Json -> $it")
+    }
 
     private fun <T> List<T>.toJsonArrayString(transform: (T) -> String): String = """[${joinToString(",", transform = transform)}]"""
+
+    private fun String.sanitizeJson(): String =
+        replace("(?m)^\\s+\n".toRegex(), "")
+            .replace(",\\s*\n\\s*}".toRegex(), "}")
 }
