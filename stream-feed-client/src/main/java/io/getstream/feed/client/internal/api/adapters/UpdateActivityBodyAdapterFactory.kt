@@ -17,7 +17,10 @@ internal object UpdateActivityBodyAdapterFactory : JsonAdapter.Factory {
         }
 
     private class UpdateActivityBodyAdapter(private val moshi: Moshi) : JsonAdapter<UpdateActivityRequest>() {
-        override fun fromJson(reader: JsonReader): UpdateActivityRequest? = null
+        override fun fromJson(reader: JsonReader): UpdateActivityRequest? {
+            reader.readJsonValue()
+            return null
+        }
 
         override fun toJson(writer: JsonWriter, value: UpdateActivityRequest?) {
             when (value) {
