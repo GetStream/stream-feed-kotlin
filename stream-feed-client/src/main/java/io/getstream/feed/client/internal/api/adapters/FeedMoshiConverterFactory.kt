@@ -14,6 +14,7 @@ object FeedMoshiConverterFactory : Converter.Factory() {
         Moshi.Builder()
             .add(CustomExtraDTOsAdapterFactory)
             .add(ActivityAdapterFactory)
+            .add(UpdateActivityBodyAdapterFactory)
             .build()
     }
 
