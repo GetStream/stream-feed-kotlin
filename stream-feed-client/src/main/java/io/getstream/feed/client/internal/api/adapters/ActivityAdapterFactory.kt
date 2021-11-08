@@ -48,7 +48,10 @@ object ActivityAdapterFactory : JsonAdapter.Factory {
 
     private class UpstreamActivitySealedDtoAdapter(moshi: Moshi) : Adapter<UpstreamActivitySealedDto>(moshi) {
 
-        override fun fromJson(reader: JsonReader): UpstreamActivitySealedDto? = null
+        override fun fromJson(reader: JsonReader): UpstreamActivitySealedDto? {
+            reader.readJsonValue()
+            return null
+        }
 
         override fun toJson(writer: JsonWriter, value: UpstreamActivitySealedDto?) {
             when (value) {
