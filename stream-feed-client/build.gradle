@@ -41,6 +41,7 @@ dependencies {
 
     testImplementation Dependencies.junitJupiterApi
     testImplementation Dependencies.junitJupiterParams
+    testImplementation Dependencies.jsonAssert
 
     testRuntimeOnly Dependencies.junitJupiterEngine
 
