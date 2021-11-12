@@ -19,7 +19,9 @@ internal object Mother {
     private val random = Random(System.currentTimeMillis())
     private val charPool: CharArray = (('a'..'z') + ('A'..'Z') + ('0'..'9')).toCharArray()
     fun positiveRandomInt(maxInt: Int = Int.MAX_VALUE - 1): Int =
-        random.nextInt(0, maxInt + 1)
+        random.nextInt(maxInt + 1)
+    fun negativeRandomInt(minInt: Int = Int.MIN_VALUE): Int =
+        random.nextInt(minInt, 0)
     fun randomString(size: Int = 20): String = buildString(capacity = size) {
         repeat(size) {
             append(charPool.random())
@@ -155,6 +157,9 @@ internal object Mother {
         activities: List<UpstreamActivitySealedDto> = randomListOf { randomUpstreamActivitySealedDto() }
     ): ActivitiesRequest =
         ActivitiesRequest(activities)
+
+    fun createGetActivitiesParams(builder: GetActivitiesParams.() -> Unit = {}): GetActivitiesParams =
+        GetActivitiesParams().apply(builder)
 
     private fun <T : CustomExtraDTOs> T.withExtras(extraData: Map<String, Any>) = apply { this.extraData.putAll(extraData) }
 }
