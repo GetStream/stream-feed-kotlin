@@ -31,6 +31,7 @@ dependencies {
     implementation Dependencies.coroutinesCore
     implementation Dependencies.moshi
     implementation Dependencies.moshiAdapters
+    implementation Dependencies.arrow
 
     kapt Dependencies.moshiCodegen
 
