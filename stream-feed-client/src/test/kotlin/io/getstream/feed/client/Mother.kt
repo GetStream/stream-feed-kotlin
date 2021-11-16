@@ -3,7 +3,6 @@ package io.getstream.feed.client
 import io.getstream.feed.client.internal.api.models.ActivitiesRequest
 import io.getstream.feed.client.internal.api.models.ActorDataDto
 import io.getstream.feed.client.internal.api.models.ActorDto
-import io.getstream.feed.client.internal.api.models.CustomExtraDTOs
 import io.getstream.feed.client.internal.api.models.DownstreamActivityDto
 import io.getstream.feed.client.internal.api.models.DownstreamEnrichActivityDto
 import io.getstream.feed.client.internal.api.models.UpdateActivitiesRequest
@@ -69,9 +68,9 @@ internal object Mother {
         time: String? = randomStringOrNull(),
         to: List<String>? = randomListOfOrNull { randomString() },
         foreignId: String? = randomStringOrNull(),
-        extraData: Map<String, Any> = emptyMap()
+        extraData: MutableMap<String, Any> = mutableMapOf()
     ): UpstreamActivityDto =
-        UpstreamActivityDto(actor, objectProperty, verb, target, time, to, foreignId).withExtras(extraData)
+        UpstreamActivityDto(actor, objectProperty, verb, target, time, to, foreignId, extraData)
 
     fun randomDownstreamActivityDto(
         id: String = randomString(),
@@ -82,9 +81,9 @@ internal object Mother {
         time: String? = randomStringOrNull(),
         to: List<String>? = randomListOfOrNull { randomString() },
         foreignId: String? = randomStringOrNull(),
-        extraData: Map<String, Any> = emptyMap()
+        extraData: MutableMap<String, Any> = mutableMapOf()
     ): DownstreamActivityDto =
-        DownstreamActivityDto(id, actor, objectProperty, verb, target, time, to, foreignId).withExtras(extraData)
+        DownstreamActivityDto(id, actor, objectProperty, verb, target, time, to, foreignId, extraData)
 
     fun randomUpstreamEnrichActivitySDto(
         actor: ActorDto = randomActorDto(),
@@ -94,9 +93,9 @@ internal object Mother {
         time: String? = randomStringOrNull(),
         to: List<String>? = randomListOfOrNull { randomString() },
         foreignId: String? = randomStringOrNull(),
-        extraData: Map<String, Any> = emptyMap()
+        extraData: MutableMap<String, Any> = mutableMapOf()
     ): UpstreamEnrichActivityDto =
-        UpstreamEnrichActivityDto(actor, objectProperty, verb, target, time, to, foreignId).withExtras(extraData)
+        UpstreamEnrichActivityDto(actor, objectProperty, verb, target, time, to, foreignId, extraData)
 
     fun randomDownstreamEnrichActivityDto(
         id: String = randomString(),
@@ -107,9 +106,9 @@ internal object Mother {
         time: String? = randomStringOrNull(),
         to: List<String>? = randomListOfOrNull { randomString() },
         foreignId: String? = randomStringOrNull(),
-        extraData: Map<String, Any> = emptyMap()
+        extraData: MutableMap<String, Any> = mutableMapOf()
     ): DownstreamEnrichActivityDto =
-        DownstreamEnrichActivityDto(id, actor, objectProperty, verb, target, time, to, foreignId).withExtras(extraData)
+        DownstreamEnrichActivityDto(id, actor, objectProperty, verb, target, time, to, foreignId, extraData)
 
     fun randomUpdateActivityByIdRequest(
         id: String = randomString(),
@@ -159,6 +158,4 @@ internal object Mother {
 
     fun createGetActivitiesParams(builder: GetActivitiesParams.() -> Unit = {}): GetActivitiesParams =
         GetActivitiesParams().apply(builder)
-
-    private fun <T : CustomExtraDTOs> T.withExtras(extraData: Map<String, Any>) = apply { this.extraData.putAll(extraData) }
 }

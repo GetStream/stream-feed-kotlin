@@ -39,7 +39,7 @@ internal class DtoAdapterFactoryTest {
     }
 
     companion object {
-        private val extraData: Map<String, Any> = mapOf(
+        private val extraData: MutableMap<String, Any> = mutableMapOf(
             "String" to "Some String",
             "Number" to 846512.0,
             "Array" to listOf(1.0, 2.0, 3.0)
