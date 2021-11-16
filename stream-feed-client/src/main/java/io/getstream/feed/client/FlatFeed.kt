@@ -12,9 +12,10 @@ class FlatFeed internal constructor(
     private val feedApi: FeedApi,
     private val feedID: FeedID,
 ) {
-    suspend fun getActivities(params: GetActivitiesParams.() -> Unit = {}): Either<Unit, List<FeedActivity>> =
+
+    suspend fun getActivities(params: GetActivitiesParams.() -> Unit = {}): Either<StreamError, List<FeedActivity>> =
         either {
-            val getActivitiesParams = GetActivitiesParams().apply(params).validate().mapLeft { }.bind()
+            val getActivitiesParams = GetActivitiesParams().apply(params).validate().bind()
             feedApi.activities(
                 slug = feedID.slug,
                 id = feedID.userID,
@@ -28,6 +29,8 @@ class FlatFeed internal constructor(
                 withOwnReactions = getActivitiesParams.withOwnReactions,
                 withReactionCounts = getActivitiesParams.withReactionCounts,
                 recentReactionsLimit = getActivitiesParams.recentReactionsLimit,
-            ).obtainEntity().map(ActivitiesResponse::toDomain).bind()
+            ).obtainEntity()
+                .map(ActivitiesResponse::toDomain)
+                .bind()
         }
 }
