@@ -1,14 +1,17 @@
 package io.getstream.feed.client.internal
 
+import arrow.core.Either
+import arrow.core.left
+import arrow.core.right
 import io.getstream.feed.client.GetActivitiesParams
+import io.getstream.feed.client.IncompatibleParamsError
 import io.getstream.feed.client.Mother.createGetActivitiesParams
 import io.getstream.feed.client.Mother.negativeRandomInt
 import io.getstream.feed.client.Mother.positiveRandomInt
 import io.getstream.feed.client.Mother.randomString
-import org.amshove.kluent.invoking
-import org.amshove.kluent.`should be`
-import org.amshove.kluent.`should throw`
-import org.amshove.kluent.`with message`
+import io.getstream.feed.client.NegativeParamError
+import io.getstream.feed.client.StreamError
+import org.amshove.kluent.`should be equal to`
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -16,87 +19,88 @@ import org.junit.jupiter.params.provider.MethodSource
 internal class GetActivitiesParamsValidatorTest {
 
     /**
-     * Use [validGetActivitiesParamsArgs] as arguments
+     * Use [getActivitiesParamsArgs] as arguments
      */
     @ParameterizedTest
-    @MethodSource("validGetActivitiesParamsArgs")
-    fun `Should return the same GetActivitiesParams calling to validate method`(getActivitiesParams: GetActivitiesParams) {
-        getActivitiesParams.validate() `should be` getActivitiesParams
-    }
-
-    /**
-     * Use [invalidGetActivitiesParamsArgs] as arguments
-     */
-    @ParameterizedTest
-    @MethodSource("invalidGetActivitiesParamsArgs")
-    fun `Should throw exception calling to validate method`(
+    @MethodSource("getActivitiesParamsArgs")
+    fun `Should return the same GetActivitiesParams calling to validate method`(
         getActivitiesParams: GetActivitiesParams,
-        expectedErrorMessage: String,
+        expectedResult: Either<StreamError, GetActivitiesParams>
     ) {
-        invoking { getActivitiesParams.validate() } `should throw` IllegalArgumentException::class `with message` expectedErrorMessage
+        getActivitiesParams.validate() `should be equal to` expectedResult
     }
 
     companion object {
 
         @JvmStatic
+        fun getActivitiesParamsArgs() = validGetActivitiesParamsArgs() + invalidGetActivitiesParamsArgs()
+
+        @JvmStatic
         fun validGetActivitiesParamsArgs() = listOf(
-            Arguments.of(createGetActivitiesParams()),
-            Arguments.of(createGetActivitiesParams { limit = positiveRandomInt() }),
-            Arguments.of(createGetActivitiesParams { offset = 0 }),
-            Arguments.of(createGetActivitiesParams { offset = null }),
-            Arguments.of(createGetActivitiesParams { withRecentReactions(null) }),
-            Arguments.of(createGetActivitiesParams { withRecentReactions(positiveRandomInt()) }),
+            createGetActivitiesParams().let { Arguments.of(it, it.right()) },
+            createGetActivitiesParams { limit = 0 }.let { Arguments.of(it, it.right()) },
+            createGetActivitiesParams { limit = positiveRandomInt() }.let { Arguments.of(it, it.right()) },
+            createGetActivitiesParams { offset = 0 }.let { Arguments.of(it, it.right()) },
+            createGetActivitiesParams { offset = null }.let { Arguments.of(it, it.right()) },
+            createGetActivitiesParams { withRecentReactions(null) }.let { Arguments.of(it, it.right()) },
+            createGetActivitiesParams { withRecentReactions(positiveRandomInt()) }.let { Arguments.of(it, it.right()) },
         )
 
         @JvmStatic
         fun invalidGetActivitiesParamsArgs() = listOf(
-            Arguments.of(createGetActivitiesParams { limit = negativeRandomInt() }, "limit can't be negative"),
-            Arguments.of(createGetActivitiesParams { offset = negativeRandomInt() }, "offset can't be negative"),
+            Arguments.of(
+                createGetActivitiesParams { limit = negativeRandomInt() },
+                NegativeParamError("limit can't be negative").left()
+            ),
+            Arguments.of(
+                createGetActivitiesParams { offset = negativeRandomInt() },
+                NegativeParamError("offset can't be negative").left()
+            ),
             Arguments.of(
                 createGetActivitiesParams {
                     idGreaterThan = randomString()
                     idGreaterThanOrEqual = randomString()
                 },
-                "Passing both idGreaterThan and idGreaterThanOrEqual is not supported"
+                IncompatibleParamsError("Passing both idGreaterThan and idGreaterThanOrEqual is not supported").left()
             ),
             Arguments.of(
                 createGetActivitiesParams {
                     idGreaterThanOrEqual = randomString()
                     idSmallerThanOrEqual = randomString()
                 },
-                "Passing both idGreaterThan[OrEqual] and idSmallerThan[OrEqual] is not supported"
+                IncompatibleParamsError("Passing both idGreaterThan[OrEqual] and idSmallerThan[OrEqual] is not supported").left()
             ),
             Arguments.of(
                 createGetActivitiesParams {
                     idGreaterThanOrEqual = randomString()
                     idSmallerThan = randomString()
                 },
-                "Passing both idGreaterThan[OrEqual] and idSmallerThan[OrEqual] is not supported"
+                IncompatibleParamsError("Passing both idGreaterThan[OrEqual] and idSmallerThan[OrEqual] is not supported").left()
             ),
             Arguments.of(
                 createGetActivitiesParams {
                     idGreaterThan = randomString()
                     idSmallerThan = randomString()
                 },
-                "Passing both idGreaterThan[OrEqual] and idSmallerThan[OrEqual] is not supported"
+                IncompatibleParamsError("Passing both idGreaterThan[OrEqual] and idSmallerThan[OrEqual] is not supported").left()
             ),
             Arguments.of(
                 createGetActivitiesParams {
                     idGreaterThan = randomString()
                     idSmallerThanOrEqual = randomString()
                 },
-                "Passing both idGreaterThan[OrEqual] and idSmallerThan[OrEqual] is not supported"
+                IncompatibleParamsError("Passing both idGreaterThan[OrEqual] and idSmallerThan[OrEqual] is not supported").left()
             ),
             Arguments.of(
                 createGetActivitiesParams {
                     idSmallerThan = randomString()
                     idSmallerThanOrEqual = randomString()
                 },
-                "Passing both idSmallerThan and idSmallerThanOrEqual is not supported"
+                IncompatibleParamsError("Passing both idSmallerThan and idSmallerThanOrEqual is not supported").left()
             ),
             Arguments.of(
                 createGetActivitiesParams { withRecentReactions(negativeRandomInt()) },
-                "recentReactionsLimit can't be negative"
+                NegativeParamError("recentReactionsLimit can't be negative").left()
             ),
         )
     }
