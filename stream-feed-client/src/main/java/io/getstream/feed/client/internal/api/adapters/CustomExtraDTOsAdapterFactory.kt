@@ -21,14 +21,15 @@ object CustomExtraDTOsAdapterFactory : JsonAdapter.Factory {
         }
 
     private class CustomExtraDTOsJsonAdapter(
-        private val mapAdapter: JsonAdapter<MutableMap<String, Any>>,
+        private val mapAdapter: JsonAdapter<MutableMap<String, Any?>>,
         private val delegateJsonAdapter: JsonAdapter<Any>,
     ) : JsonAdapter<CustomExtraDTOs>() {
         override fun fromJson(reader: JsonReader): CustomExtraDTOs? =
             mapAdapter.fromJson(reader)?.let {
-                (delegateJsonAdapter.fromJsonValue(it) as CustomExtraDTOs?)?.apply {
+                val notNullValuesMap: Map<String, Any> = it.mapNotNull { it.value?.let { value -> it.key to value } }.toMap()
+                (delegateJsonAdapter.fromJsonValue(notNullValuesMap) as CustomExtraDTOs?)?.apply {
                     val keysToRemove: MutableSet<String> = mapAdapter.fromJson(delegateJsonAdapter.toJson(this))?.keys ?: mutableSetOf()
-                    extraData.putAll(it - keysToRemove)
+                    extraData.putAll(notNullValuesMap - keysToRemove)
                 }
             }
 
@@ -38,11 +39,12 @@ object CustomExtraDTOsAdapterFactory : JsonAdapter.Factory {
                 mapAdapter.fromJson(
                     delegateJsonAdapter.toJson(value)
                 )?.apply {
+                    remove("extraData")
                     putAll(value?.extraData ?: emptyMap())
                 }
             )
     }
 
-    private val Moshi.mapAdapter: JsonAdapter<MutableMap<String, Any>>
+    private val Moshi.mapAdapter: JsonAdapter<MutableMap<String, Any?>>
         get() = this.adapter(Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java))
 }

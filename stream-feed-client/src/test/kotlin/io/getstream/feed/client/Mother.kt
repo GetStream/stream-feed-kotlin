@@ -58,9 +58,8 @@ internal object Mother {
         handle: String = randomString(),
         name: String = randomString(),
         profileImage: String = randomString(),
-        extraData: Map<String, Any> = emptyMap()
     ): ActorDataDto =
-        ActorDataDto(handle, name, profileImage).withExtras(extraData)
+        ActorDataDto(handle, name, profileImage)
 
     fun randomUpstreamActivityDto(
         actor: String = randomString(),
