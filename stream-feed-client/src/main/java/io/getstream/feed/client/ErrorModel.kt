@@ -14,3 +14,4 @@ sealed class ParamError : StreamError() {
 }
 data class NegativeParamError(override val message: String) : ParamError()
 data class IncompatibleParamsError(override val message: String) : ParamError()
+data class EmptyParamError(override val message: String) : ParamError()
