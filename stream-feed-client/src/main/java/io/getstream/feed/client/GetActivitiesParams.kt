@@ -11,6 +11,7 @@ class GetActivitiesParams {
     var withReactionCounts: Boolean = false
     internal var withRecentReactions: Boolean = false
     internal var recentReactionsLimit: Int? = null
+    var enrich: Boolean = false
 
     fun withRecentReactions(limit: Int? = null) = apply {
         withRecentReactions = true
