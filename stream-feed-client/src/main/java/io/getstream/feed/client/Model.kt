@@ -9,8 +9,8 @@ class Actor(
     val id: String,
     val handle: String,
     val name: String,
-    val profileImage: String,
-    val extraData: Map<String, Any>
+    val profileImage: String = "",
+    val extraData: Map<String, Any> = emptyMap()
 )
 
 sealed class FeedActivity {
@@ -24,23 +24,23 @@ sealed class FeedActivity {
 }
 
 data class Activity(
-    override val id: String,
+    override val id: String = "",
     val actor: String,
     override val `object`: String,
     override val verb: String,
-    override val to: List<FeedID>,
-    override val time: String,
-    override val foreignId: String?,
-    override val extraData: Map<String, Any>
+    override val to: List<FeedID> = emptyList(),
+    override val time: String = "",
+    override val foreignId: String? = null,
+    override val extraData: Map<String, Any> = emptyMap()
 ) : FeedActivity()
 
 data class EnrichActivity(
-    override val id: String,
+    override val id: String = "",
     val actor: Actor,
     override val `object`: String,
     override val verb: String,
-    override val to: List<FeedID>,
-    override val time: String,
-    override val foreignId: String?,
-    override val extraData: Map<String, Any>
+    override val to: List<FeedID> = emptyList(),
+    override val time: String = "",
+    override val foreignId: String? = null,
+    override val extraData: Map<String, Any> = emptyMap()
 ) : FeedActivity()
