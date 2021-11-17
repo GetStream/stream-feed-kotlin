@@ -1,8 +1,12 @@
 package io.getstream.feed.client.internal.api
 
+import io.getstream.feed.client.internal.api.models.ActivitiesRequest
 import io.getstream.feed.client.internal.api.models.ActivitiesResponse
+import io.getstream.feed.client.internal.api.models.CreateActivitiesResponse
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -39,4 +43,11 @@ internal interface FeedApi {
         @Query("withReactionCounts") withReactionCounts: Boolean,
         @Query("recentReactionsLimit") recentReactionsLimit: Int?,
     ): Response<ActivitiesResponse>
+
+    @POST("/api/v1.0/feed/{slug}/{id}")
+    suspend fun sendActivities(
+        @Path("slug") slug: String,
+        @Path("id") id: String,
+        @Body activities: ActivitiesRequest,
+    ): Response<CreateActivitiesResponse>
 }
