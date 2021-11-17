@@ -10,8 +10,6 @@ import io.getstream.feed.client.internal.api.models.UpdateActivityByForeignIdReq
 import io.getstream.feed.client.internal.api.models.UpdateActivityByIdRequest
 import io.getstream.feed.client.internal.api.models.UpdateActivityRequest
 import io.getstream.feed.client.internal.api.models.UpstreamActivityDto
-import io.getstream.feed.client.internal.api.models.UpstreamActivitySealedDto
-import io.getstream.feed.client.internal.api.models.UpstreamEnrichActivityDto
 import kotlin.random.Random
 
 internal object Mother {
@@ -85,18 +83,6 @@ internal object Mother {
     ): DownstreamActivityDto =
         DownstreamActivityDto(id, actor, objectProperty, verb, target, time, to, foreignId, extraData)
 
-    fun randomUpstreamEnrichActivitySDto(
-        actor: ActorDto = randomActorDto(),
-        objectProperty: String = randomString(),
-        verb: String = randomString(),
-        target: String? = randomStringOrNull(),
-        time: String? = randomStringOrNull(),
-        to: List<String>? = randomListOfOrNull { randomString() },
-        foreignId: String? = randomStringOrNull(),
-        extraData: MutableMap<String, Any> = mutableMapOf()
-    ): UpstreamEnrichActivityDto =
-        UpstreamEnrichActivityDto(actor, objectProperty, verb, target, time, to, foreignId, extraData)
-
     fun randomDownstreamEnrichActivityDto(
         id: String = randomString(),
         actor: ActorDto = randomActorDto(),
@@ -143,16 +129,13 @@ internal object Mother {
         }
     )
 
-    fun randomUpstreamActivitySealedDto(): UpstreamActivitySealedDto =
-        oneOf(::randomUpstreamActivityDto, ::randomUpstreamEnrichActivitySDto)
-
     fun randomUpdateActivitiesRequest(
         updates: List<UpdateActivityRequest> = randomListOf { randomUpdateActivityRequest() }
     ): UpdateActivitiesRequest =
         UpdateActivitiesRequest(updates)
 
     fun randomActivitiesRequest(
-        activities: List<UpstreamActivitySealedDto> = randomListOf { randomUpstreamActivitySealedDto() }
+        activities: List<UpstreamActivityDto> = randomListOf { randomUpstreamActivityDto() }
     ): ActivitiesRequest =
         ActivitiesRequest(activities)
 

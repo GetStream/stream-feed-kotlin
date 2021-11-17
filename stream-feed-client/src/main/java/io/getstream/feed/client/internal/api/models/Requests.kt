@@ -32,5 +32,5 @@ internal data class UpdateActivitiesRequest(
 
 @JsonClass(generateAdapter = true)
 internal data class ActivitiesRequest(
-    @Json(name = "activities") val activities: List<UpstreamActivitySealedDto>
+    @Json(name = "activities") val activities: List<UpstreamActivityDto>
 )
