@@ -9,8 +9,6 @@ import io.getstream.feed.client.internal.api.models.UpdateActivityByForeignIdReq
 import io.getstream.feed.client.internal.api.models.UpdateActivityByIdRequest
 import io.getstream.feed.client.internal.api.models.UpdateActivityRequest
 import io.getstream.feed.client.internal.api.models.UpstreamActivityDto
-import io.getstream.feed.client.internal.api.models.UpstreamActivitySealedDto
-import io.getstream.feed.client.internal.api.models.UpstreamEnrichActivityDto
 
 internal object JSONMother {
 
@@ -44,19 +42,6 @@ internal object JSONMother {
         {
         "id": "$id",
         "actor" : "$actor",
-        "object" : "$objectProperty",
-        "verb" : "$verb",
-        ${target?.let { "\"target\" : \"$it\"," } ?: ""}
-        ${time?.let { "\"time\" : \"$it\"," } ?: ""}
-        ${to?.let { "\"to\" : ${it.toJsonArrayString { "\"$it\"" }}," } ?: ""}
-        ${foreignId?.let { "\"foreign_id\" : \"$it\","} ?: ""}
-        ${extraDataJsonString ?: ""} 
-        }
-    """.trimIndent().sanitizeJson()
-
-    fun UpstreamEnrichActivityDto.toJsonString(extraDataJsonString: String? = null): String = """
-        {
-        "actor" : ${actor.toJsonString()},
         "object" : "$objectProperty",
         "verb" : "$verb",
         ${target?.let { "\"target\" : \"$it\"," } ?: ""}
@@ -103,11 +88,6 @@ internal object JSONMother {
         is UpdateActivityByIdRequest -> this.toJsonString()
     }
 
-    fun UpstreamActivitySealedDto.toJsonString(): String = when (this) {
-        is UpstreamActivityDto -> this.toJsonString()
-        is UpstreamEnrichActivityDto -> this.toJsonString()
-    }
-
     fun UpdateActivitiesRequest.toJsonString(): String = """
         {
         "changes": ${udpates.toJsonArrayString { it.toJsonString() }}
@@ -118,9 +98,7 @@ internal object JSONMother {
         {
         "activities": ${activities.toJsonArrayString { it.toJsonString() }}
         }
-    """.trimIndent().also {
-        println("JcLog: Json -> $it")
-    }
+    """.trimIndent()
 
     private fun <T> List<T>.toJsonArrayString(transform: (T) -> String): String = """[${joinToString(",", transform = transform)}]"""
 

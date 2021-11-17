@@ -11,8 +11,6 @@ import io.getstream.feed.client.internal.api.models.DownstreamActivityDto
 import io.getstream.feed.client.internal.api.models.DownstreamActivitySealedDto
 import io.getstream.feed.client.internal.api.models.DownstreamEnrichActivityDto
 import io.getstream.feed.client.internal.api.models.UpstreamActivityDto
-import io.getstream.feed.client.internal.api.models.UpstreamActivitySealedDto
-import io.getstream.feed.client.internal.api.models.UpstreamEnrichActivityDto
 import java.lang.reflect.Type
 
 object ActivityAdapterFactory : JsonAdapter.Factory {
@@ -20,9 +18,8 @@ object ActivityAdapterFactory : JsonAdapter.Factory {
         when (type) {
             ActivitySealedDto::class.java -> ActivitySealedDtoAdapter(
                 DownstreamActivitySealedDtoAdapter(moshi),
-                UpstreamActivitySealedDtoAdapter(moshi),
+                moshi.adapter(UpstreamActivityDto::class.java),
             )
-            UpstreamActivitySealedDto::class.java -> UpstreamActivitySealedDtoAdapter(moshi)
             DownstreamActivitySealedDto::class.java -> DownstreamActivitySealedDtoAdapter(moshi)
             else -> null
         }
@@ -46,24 +43,9 @@ object ActivityAdapterFactory : JsonAdapter.Factory {
         }
     }
 
-    private class UpstreamActivitySealedDtoAdapter(moshi: Moshi) : Adapter<UpstreamActivitySealedDto>(moshi) {
-
-        override fun fromJson(reader: JsonReader): UpstreamActivitySealedDto? {
-            reader.readJsonValue()
-            return null
-        }
-
-        override fun toJson(writer: JsonWriter, value: UpstreamActivitySealedDto?) {
-            when (value) {
-                is UpstreamActivityDto -> upstreamActivityDtoAdapter.toJson(writer, value)
-                is UpstreamEnrichActivityDto -> upstreamEnrichActivityDtoAdapter.toJson(writer, value)
-            }
-        }
-    }
-
     private class ActivitySealedDtoAdapter(
         private val downstreamActivitySealedDtoAdapter: DownstreamActivitySealedDtoAdapter,
-        private val upstreamActivitySealedDtoAdapter: UpstreamActivitySealedDtoAdapter
+        private val upstreamActivityDtoAdapter: JsonAdapter<UpstreamActivityDto>
     ) : JsonAdapter<ActivitySealedDto>() {
 
         override fun fromJson(reader: JsonReader): ActivitySealedDto? =
@@ -72,7 +54,7 @@ object ActivityAdapterFactory : JsonAdapter.Factory {
         override fun toJson(writer: JsonWriter, value: ActivitySealedDto?) =
             when (value) {
                 is DownstreamActivitySealedDto -> downstreamActivitySealedDtoAdapter.toJson(writer, value)
-                is UpstreamActivitySealedDto -> upstreamActivitySealedDtoAdapter.toJson(writer, value)
+                is UpstreamActivityDto -> upstreamActivityDtoAdapter.toJson(writer, value)
                 null -> { }
             }
     }
@@ -86,12 +68,6 @@ object ActivityAdapterFactory : JsonAdapter.Factory {
         }
         val downstreamEnrichActivityDtoAdapter: JsonAdapter<DownstreamEnrichActivityDto> by lazy {
             moshi.adapter(DownstreamEnrichActivityDto::class.java)
-        }
-        val upstreamActivityDtoAdapter: JsonAdapter<UpstreamActivityDto> by lazy {
-            moshi.adapter(UpstreamActivityDto::class.java)
-        }
-        val upstreamEnrichActivityDtoAdapter: JsonAdapter<UpstreamEnrichActivityDto> by lazy {
-            moshi.adapter(UpstreamEnrichActivityDto::class.java)
         }
     }
 }

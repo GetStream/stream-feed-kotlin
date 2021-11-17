@@ -25,7 +25,6 @@ internal sealed class ActivitySealedDto : CustomExtraDTOs() {
     @Json(name = "to") abstract val to: List<String>?
     @Json(name = "foreign_id") abstract val foreignId: String?
 }
-internal sealed class UpstreamActivitySealedDto : ActivitySealedDto()
 internal sealed class DownstreamActivitySealedDto : ActivitySealedDto() {
     abstract val id: String
 }
@@ -40,7 +39,7 @@ internal data class UpstreamActivityDto(
     @Json(name = "to") override val to: List<String>? = null,
     @Json(name = "foreign_id") override val foreignId: String? = null,
     override val extraData: MutableMap<String, Any> = mutableMapOf(),
-) : UpstreamActivitySealedDto()
+) : ActivitySealedDto()
 
 @JsonClass(generateAdapter = true)
 internal data class DownstreamActivityDto(
@@ -54,18 +53,6 @@ internal data class DownstreamActivityDto(
     @Json(name = "foreign_id") override val foreignId: String? = null,
     override val extraData: MutableMap<String, Any> = mutableMapOf(),
 ) : DownstreamActivitySealedDto()
-
-@JsonClass(generateAdapter = true)
-internal data class UpstreamEnrichActivityDto(
-    @Json(name = "actor") val actor: ActorDto,
-    @Json(name = "object") override val objectProperty: String,
-    @Json(name = "verb") override val verb: String,
-    @Json(name = "target") override val target: String? = null,
-    @Json(name = "time") override val time: String? = null,
-    @Json(name = "to") override val to: List<String>? = null,
-    @Json(name = "foreign_id") override val foreignId: String? = null,
-    override val extraData: MutableMap<String, Any> = mutableMapOf(),
-) : UpstreamActivitySealedDto()
 
 @JsonClass(generateAdapter = true)
 internal data class DownstreamEnrichActivityDto(
