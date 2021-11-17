@@ -3,6 +3,8 @@ package io.getstream.feed.client.internal
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
+import io.getstream.feed.client.EmptyParamError
+import io.getstream.feed.client.FeedActivity
 import io.getstream.feed.client.GetActivitiesParams
 import io.getstream.feed.client.IncompatibleParamsError
 import io.getstream.feed.client.NegativeParamError
@@ -18,5 +20,10 @@ internal fun GetActivitiesParams.validate(): Either<ParamError, GetActivitiesPar
     listOfNotNull(idGreaterThan, idGreaterThanOrEqual, idSmallerThan, idSmallerThanOrEqual).size > 1 ->
         IncompatibleParamsError("Passing both idGreaterThan[OrEqual] and idSmallerThan[OrEqual] is not supported").left()
     recentReactionsLimit?.let { it < 0 } == true -> NegativeParamError("recentReactionsLimit can't be negative").left()
+    else -> this.right()
+}
+
+internal fun List<FeedActivity>.validate(): Either<ParamError, List<FeedActivity>> = when {
+    size <= 0 -> EmptyParamError("The list of activities can't be empty").left()
     else -> this.right()
 }
