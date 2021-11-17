@@ -19,20 +19,37 @@ class FlatFeed internal constructor(
     suspend fun getActivities(params: GetActivitiesParams.() -> Unit = {}): Either<StreamError, List<FeedActivity>> =
         either {
             val getActivitiesParams = GetActivitiesParams().apply(params).validate().bind()
-            feedApi.activities(
-                slug = feedID.slug,
-                id = feedID.userID,
-                limit = getActivitiesParams.limit,
-                offset = getActivitiesParams.offset,
-                idGreaterThan = getActivitiesParams.idGreaterThan,
-                idSmallerThan = getActivitiesParams.idSmallerThan,
-                idGreaterThanOrEqual = getActivitiesParams.idGreaterThanOrEqual,
-                idSmallerThanOrEqual = getActivitiesParams.idSmallerThanOrEqual,
-                withRecentReactions = getActivitiesParams.withRecentReactions,
-                withOwnReactions = getActivitiesParams.withOwnReactions,
-                withReactionCounts = getActivitiesParams.withReactionCounts,
-                recentReactionsLimit = getActivitiesParams.recentReactionsLimit,
-            ).obtainEntity()
+            when (getActivitiesParams.enrich) {
+                true -> feedApi.activities(
+                    slug = feedID.slug,
+                    id = feedID.userID,
+                    limit = getActivitiesParams.limit,
+                    offset = getActivitiesParams.offset,
+                    idGreaterThan = getActivitiesParams.idGreaterThan,
+                    idSmallerThan = getActivitiesParams.idSmallerThan,
+                    idGreaterThanOrEqual = getActivitiesParams.idGreaterThanOrEqual,
+                    idSmallerThanOrEqual = getActivitiesParams.idSmallerThanOrEqual,
+                    withRecentReactions = getActivitiesParams.withRecentReactions,
+                    withOwnReactions = getActivitiesParams.withOwnReactions,
+                    withReactionCounts = getActivitiesParams.withReactionCounts,
+                    recentReactionsLimit = getActivitiesParams.recentReactionsLimit,
+                )
+                false -> feedApi.enrichActivities(
+                    slug = feedID.slug,
+                    id = feedID.userID,
+                    limit = getActivitiesParams.limit,
+                    offset = getActivitiesParams.offset,
+                    idGreaterThan = getActivitiesParams.idGreaterThan,
+                    idSmallerThan = getActivitiesParams.idSmallerThan,
+                    idGreaterThanOrEqual = getActivitiesParams.idGreaterThanOrEqual,
+                    idSmallerThanOrEqual = getActivitiesParams.idSmallerThanOrEqual,
+                    withRecentReactions = getActivitiesParams.withRecentReactions,
+                    withOwnReactions = getActivitiesParams.withOwnReactions,
+                    withReactionCounts = getActivitiesParams.withReactionCounts,
+                    recentReactionsLimit = getActivitiesParams.recentReactionsLimit,
+                )
+            }
+                .obtainEntity()
                 .map(ActivitiesResponse::toDomain)
                 .bind()
         }
