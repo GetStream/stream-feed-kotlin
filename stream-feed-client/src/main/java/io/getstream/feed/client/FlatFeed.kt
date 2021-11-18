@@ -89,4 +89,19 @@ class FlatFeed internal constructor(
             ).obtainEntity()
                 .bind()
         }
+
+    suspend fun unfollow(params: UnfollowParams.() -> Unit = {}): Either<StreamError, Unit> =
+        either {
+            val unfollowParams: UnfollowParams = UnfollowParams()
+                .apply(params)
+                .validate()
+                .bind()
+            feedApi.unfollow(
+                slug = feedID.slug,
+                id = feedID.userID,
+                unfollowParams.targetFeedID.toStringFeedID(),
+                unfollowParams.keepHistory
+            ).obtainEntity()
+                .bind()
+        }
 }
