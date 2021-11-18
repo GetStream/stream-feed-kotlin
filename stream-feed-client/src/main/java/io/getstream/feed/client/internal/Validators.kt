@@ -11,6 +11,7 @@ import io.getstream.feed.client.IncompatibleParamsError
 import io.getstream.feed.client.InvalidParamError
 import io.getstream.feed.client.NegativeParamError
 import io.getstream.feed.client.ParamError
+import io.getstream.feed.client.UnfollowParams
 
 internal fun GetActivitiesParams.validate(): Either<ParamError, GetActivitiesParams> = when {
     limit < 0 -> NegativeParamError("limit can't be negative").left()
@@ -34,5 +35,10 @@ internal fun FollowParams.validate(): Either<ParamError, FollowParams> = when {
     !isInitialized -> EmptyParamError("targetFeedID property need to be initialized").left()
     activityCopyLimit?.let { it < 0 } == true -> NegativeParamError("activityCopyLimit can't be negative").left()
     activityCopyLimit?.let { it > 1000 } == true -> InvalidParamError("activityCopyLimit can't be bigger than 1000").left()
+    else -> this.right()
+}
+
+internal fun UnfollowParams.validate(): Either<ParamError, UnfollowParams> = when {
+    !isInitialized -> EmptyParamError("targetFeedID property need to be initialized").left()
     else -> this.right()
 }
