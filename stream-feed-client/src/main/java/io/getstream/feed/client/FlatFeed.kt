@@ -6,9 +6,11 @@ import io.getstream.feed.client.internal.api.FeedApi
 import io.getstream.feed.client.internal.api.models.ActivitiesRequest
 import io.getstream.feed.client.internal.api.models.ActivitiesResponse
 import io.getstream.feed.client.internal.api.models.CreateActivitiesResponse
+import io.getstream.feed.client.internal.api.models.FollowRequest
 import io.getstream.feed.client.internal.obtainEntity
 import io.getstream.feed.client.internal.toDTO
 import io.getstream.feed.client.internal.toDomain
+import io.getstream.feed.client.internal.toStringFeedID
 import io.getstream.feed.client.internal.validate
 
 class FlatFeed internal constructor(
@@ -72,4 +74,19 @@ class FlatFeed internal constructor(
 
     suspend fun addActivity(activity: FeedActivity): Either<StreamError, FeedActivity> =
         addActivities(listOf(activity)).map(List<FeedActivity>::first)
+
+    suspend fun follow(params: FollowParams.() -> Unit = {}): Either<StreamError, Unit> =
+        either {
+            val followRequest: FollowRequest = FollowParams()
+                .apply(params)
+                .validate()
+                .bind()
+                .let { FollowRequest(it.targetFeedID.toStringFeedID(), it.activityCopyLimit) }
+            feedApi.follow(
+                slug = feedID.slug,
+                id = feedID.userID,
+                followRequest = followRequest,
+            ).obtainEntity()
+                .bind()
+        }
 }
