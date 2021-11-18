@@ -34,3 +34,9 @@ internal data class UpdateActivitiesRequest(
 internal data class ActivitiesRequest(
     @Json(name = "activities") val activities: List<UpstreamActivityDto>
 )
+
+@JsonClass(generateAdapter = true)
+internal data class FollowRequest(
+    @Json(name = "target") val targetFeedId: String,
+    @Json(name = "activity_copy_limit") val activityCopyLimit: Int?,
+)
