@@ -5,8 +5,10 @@ import arrow.core.left
 import arrow.core.right
 import io.getstream.feed.client.EmptyParamError
 import io.getstream.feed.client.FeedActivity
+import io.getstream.feed.client.FollowParams
 import io.getstream.feed.client.GetActivitiesParams
 import io.getstream.feed.client.IncompatibleParamsError
+import io.getstream.feed.client.InvalidParamError
 import io.getstream.feed.client.NegativeParamError
 import io.getstream.feed.client.ParamError
 
@@ -25,5 +27,12 @@ internal fun GetActivitiesParams.validate(): Either<ParamError, GetActivitiesPar
 
 internal fun List<FeedActivity>.validate(): Either<ParamError, List<FeedActivity>> = when {
     size <= 0 -> EmptyParamError("The list of activities can't be empty").left()
+    else -> this.right()
+}
+
+internal fun FollowParams.validate(): Either<ParamError, FollowParams> = when {
+    !isInitialized -> EmptyParamError("targetFeedID property need to be initialized").left()
+    activityCopyLimit?.let { it < 0 } == true -> NegativeParamError("activityCopyLimit can't be negative").left()
+    activityCopyLimit?.let { it > 1000 } == true -> InvalidParamError("activityCopyLimit can't be bigger than 1000").left()
     else -> this.right()
 }
