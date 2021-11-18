@@ -96,6 +96,12 @@ internal object Mother {
     ): DownstreamEnrichActivityDto =
         DownstreamEnrichActivityDto(id, actor, objectProperty, verb, target, time, to, foreignId, extraData)
 
+    fun randomFeedID(
+        slug: String = randomString(),
+        userId: String = randomString(),
+    ): FeedID =
+        FeedID(slug, userId)
+
     fun randomActor(
         id: String = randomString(),
         handle: String = randomString(),
