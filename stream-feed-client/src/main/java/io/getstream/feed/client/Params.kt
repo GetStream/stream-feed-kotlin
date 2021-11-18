@@ -7,6 +7,13 @@ class FollowParams {
     internal val isInitialized
         get() = this::targetFeedID.isInitialized
 }
+class UnfollowParams {
+    lateinit var targetFeedID: FeedID
+    var keepHistory: Boolean? = null
+
+    internal val isInitialized
+        get() = this::targetFeedID.isInitialized
+}
 
 class GetActivitiesParams {
     var limit: Int = 25
