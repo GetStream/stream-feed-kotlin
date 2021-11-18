@@ -6,6 +6,7 @@ import io.getstream.feed.client.internal.api.models.CreateActivitiesResponse
 import io.getstream.feed.client.internal.api.models.FollowRequest
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -57,5 +58,13 @@ internal interface FeedApi {
         @Path("slug") slug: String,
         @Path("id") id: String,
         @Body followRequest: FollowRequest,
+    ): Response<Unit>
+
+    @DELETE("/api/v1.0/feed/{slug}/{id}/following/{targetFeedID}")
+    suspend fun unfollow(
+        @Path("slug") slug: String,
+        @Path("id") id: String,
+        @Path("targetFeedID") targetFeedId: String,
+        @Query("keep_history") keepHistory: Boolean?,
     ): Response<Unit>
 }
