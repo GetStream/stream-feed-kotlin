@@ -1,5 +1,13 @@
 package io.getstream.feed.client
 
+class FollowParams {
+    lateinit var targetFeedID: FeedID
+    var activityCopyLimit: Int? = 100
+
+    internal val isInitialized
+        get() = this::targetFeedID.isInitialized
+}
+
 class GetActivitiesParams {
     var limit: Int = 25
     var offset: Int? = null
