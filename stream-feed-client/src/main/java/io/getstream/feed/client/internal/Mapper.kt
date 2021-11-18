@@ -61,7 +61,7 @@ internal fun DownstreamEnrichActivityDto.toDomain(): EnrichActivity =
     )
 
 private fun String.toFeedID(): FeedID = split(":").let { FeedID(it[0], it[1]) }
-private fun FeedID.toStringFeedID(): String = "$slug:$userID"
+internal fun FeedID.toStringFeedID(): String = "$slug:$userID"
 
 internal fun ActivitiesResponse.toDomain(): List<FeedActivity> =
     activities.map { it.toDomain() }
