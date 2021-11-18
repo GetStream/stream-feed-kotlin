@@ -3,6 +3,7 @@ package io.getstream.feed.client.internal.api
 import io.getstream.feed.client.internal.api.models.ActivitiesRequest
 import io.getstream.feed.client.internal.api.models.ActivitiesResponse
 import io.getstream.feed.client.internal.api.models.CreateActivitiesResponse
+import io.getstream.feed.client.internal.api.models.FollowRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -50,4 +51,11 @@ internal interface FeedApi {
         @Path("id") id: String,
         @Body activities: ActivitiesRequest,
     ): Response<CreateActivitiesResponse>
+
+    @POST("/api/v1.0/feed/{slug}/{id}/follows")
+    suspend fun follow(
+        @Path("slug") slug: String,
+        @Path("id") id: String,
+        @Body followRequest: FollowRequest,
+    ): Response<Unit>
 }
