@@ -25,6 +25,8 @@ internal object Mother {
         }
     }
 
+    fun randomBoolean(): Boolean = random.nextBoolean()
+
     fun <T> oneOf(vararg randomGen: () -> T): T = randomGen.random().invoke()
 
     fun <T> randomOrNull(randomGen: () -> T): T? = random.nextBoolean().let {
