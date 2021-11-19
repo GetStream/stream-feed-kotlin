@@ -84,4 +84,18 @@ internal interface FeedApi {
         @Query("limit") limit: Int?,
         @Query("offset") offset: Int?,
     ): Response<FollowRelationResponse>
+
+    @DELETE("/api/v1.0/feed/{slug}/{id}/{activityId}")
+    suspend fun removeActivityById(
+        @Path("slug") slug: String,
+        @Path("id") id: String,
+        @Path("activityId") activityId: String,
+    ): Response<Unit>
+
+    @DELETE("/api/v1.0/feed/{slug}/{id}/{foreignId}?foreign_id=1")
+    suspend fun removeActivityByForeignId(
+        @Path("slug") slug: String,
+        @Path("id") id: String,
+        @Path("foreignId") foreignId: String,
+    ): Response<Unit>
 }
