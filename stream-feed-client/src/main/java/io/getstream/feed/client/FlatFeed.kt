@@ -121,4 +121,20 @@ class FlatFeed internal constructor(
                 .map(FollowRelationResponse::toDomain)
                 .bind()
         }
+
+    suspend fun followers(params: FollowersParams.() -> Unit): Either<StreamError, List<FollowRelation>> =
+        either {
+            val followersParams = FollowersParams()
+                .apply(params)
+                .validate()
+                .bind()
+            feedApi.followers(
+                slug = feedID.slug,
+                id = feedID.userID,
+                limit = followersParams.limit,
+                offset = followersParams.offset,
+            ).obtainEntity()
+                .map(FollowRelationResponse::toDomain)
+                .bind()
+        }
 }
