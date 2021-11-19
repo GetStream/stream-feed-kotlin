@@ -20,6 +20,11 @@ class FollowedParams {
     var offset: Int? = null
 }
 
+class FollowersParams {
+    var limit: Int? = null
+    var offset: Int? = null
+}
+
 class GetActivitiesParams {
     var limit: Int = 25
     var offset: Int? = null
