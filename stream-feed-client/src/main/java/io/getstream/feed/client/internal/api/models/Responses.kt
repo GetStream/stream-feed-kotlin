@@ -21,3 +21,8 @@ internal data class ErrorResponse(
     @Json(name = "exception") val error: String,
     @Json(name = "more_info") val moreInfo: String,
 )
+
+@JsonClass(generateAdapter = true)
+internal data class FollowRelationResponse(
+    @Json(name = "results") val followRelations: List<FollowRelationDto>
+)
