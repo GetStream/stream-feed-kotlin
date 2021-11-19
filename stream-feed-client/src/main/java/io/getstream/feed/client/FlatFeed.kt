@@ -104,4 +104,19 @@ class FlatFeed internal constructor(
             ).obtainEntity()
                 .bind()
         }
+
+    suspend fun followed(params: FollowedParams.() -> Unit): Either<StreamError, Unit> =
+        either {
+            val followedParams = FollowedParams()
+                .apply(params)
+                .validate()
+                .bind()
+            feedApi.followed(
+                slug = feedID.slug,
+                id = feedID.userID,
+                limit = followedParams.limit,
+                offset = followedParams.offset,
+            ).obtainEntity()
+                .bind()
+        }
 }
