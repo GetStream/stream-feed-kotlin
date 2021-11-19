@@ -137,4 +137,22 @@ class FlatFeed internal constructor(
                 .map(FollowRelationResponse::toDomain)
                 .bind()
         }
+
+    suspend fun removeActivity(params: RemoveActivityParams): Either<StreamError, Unit> =
+        either {
+            val removeActivityParams: RemoveActivityParams = params.validate().bind()
+            when (removeActivityParams) {
+                is RemoveActivityByForeignId -> feedApi.removeActivityByForeignId(
+                    slug = feedID.slug,
+                    id = feedID.userID,
+                    removeActivityParams.foreignId,
+                )
+                is RemoveActivityById -> feedApi.removeActivityById(
+                    slug = feedID.slug,
+                    id = feedID.userID,
+                    removeActivityParams.activityId,
+                )
+            }.obtainEntity()
+                .bind()
+        }
 }
