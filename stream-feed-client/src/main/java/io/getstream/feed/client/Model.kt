@@ -44,3 +44,8 @@ data class EnrichActivity(
     override val foreignId: String? = null,
     override val extraData: Map<String, Any> = emptyMap()
 ) : FeedActivity()
+
+data class FollowRelation(
+    val sourceFeedID: FeedID,
+    val targetFeedID: FeedID,
+)
