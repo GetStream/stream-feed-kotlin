@@ -7,6 +7,7 @@ import io.getstream.feed.client.EmptyParamError
 import io.getstream.feed.client.FeedActivity
 import io.getstream.feed.client.FollowParams
 import io.getstream.feed.client.FollowedParams
+import io.getstream.feed.client.FollowersParams
 import io.getstream.feed.client.GetActivitiesParams
 import io.getstream.feed.client.IncompatibleParamsError
 import io.getstream.feed.client.InvalidParamError
@@ -45,6 +46,12 @@ internal fun UnfollowParams.validate(): Either<ParamError, UnfollowParams> = whe
 }
 
 internal fun FollowedParams.validate(): Either<ParamError, FollowedParams> = when {
+    limit?.let { it < 0 } == true -> NegativeParamError("limit can't be negative").left()
+    offset?.let { it < 0 } == true -> NegativeParamError("offset can't be negative").left()
+    else -> this.right()
+}
+
+internal fun FollowersParams.validate(): Either<ParamError, FollowersParams> = when {
     limit?.let { it < 0 } == true -> NegativeParamError("limit can't be negative").left()
     offset?.let { it < 0 } == true -> NegativeParamError("offset can't be negative").left()
     else -> this.right()
