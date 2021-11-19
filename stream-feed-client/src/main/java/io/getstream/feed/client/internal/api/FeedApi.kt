@@ -3,6 +3,7 @@ package io.getstream.feed.client.internal.api
 import io.getstream.feed.client.internal.api.models.ActivitiesRequest
 import io.getstream.feed.client.internal.api.models.ActivitiesResponse
 import io.getstream.feed.client.internal.api.models.CreateActivitiesResponse
+import io.getstream.feed.client.internal.api.models.FollowRelationResponse
 import io.getstream.feed.client.internal.api.models.FollowRequest
 import retrofit2.Response
 import retrofit2.http.Body
@@ -67,4 +68,12 @@ internal interface FeedApi {
         @Path("targetFeedID") targetFeedId: String,
         @Query("keep_history") keepHistory: Boolean?,
     ): Response<Unit>
+
+    @GET("/api/v1.0/feed/{slug}/{id}/following")
+    suspend fun followed(
+        @Path("slug") slug: String,
+        @Path("id") id: String,
+        @Query("limit") limit: Int?,
+        @Query("offset") offset: Int?,
+    ): Response<FollowRelationResponse>
 }
