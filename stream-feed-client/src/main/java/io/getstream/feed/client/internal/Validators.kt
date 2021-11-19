@@ -6,6 +6,7 @@ import arrow.core.right
 import io.getstream.feed.client.EmptyParamError
 import io.getstream.feed.client.FeedActivity
 import io.getstream.feed.client.FollowParams
+import io.getstream.feed.client.FollowedParams
 import io.getstream.feed.client.GetActivitiesParams
 import io.getstream.feed.client.IncompatibleParamsError
 import io.getstream.feed.client.InvalidParamError
@@ -40,5 +41,11 @@ internal fun FollowParams.validate(): Either<ParamError, FollowParams> = when {
 
 internal fun UnfollowParams.validate(): Either<ParamError, UnfollowParams> = when {
     !isInitialized -> EmptyParamError("targetFeedID property need to be initialized").left()
+    else -> this.right()
+}
+
+internal fun FollowedParams.validate(): Either<ParamError, FollowedParams> = when {
+    limit?.let { it < 0 } == true -> NegativeParamError("limit can't be negative").left()
+    offset?.let { it < 0 } == true -> NegativeParamError("offset can't be negative").left()
     else -> this.right()
 }
