@@ -76,4 +76,12 @@ internal interface FeedApi {
         @Query("limit") limit: Int?,
         @Query("offset") offset: Int?,
     ): Response<FollowRelationResponse>
+
+    @GET("/api/v1.0/feed/{slug}/{id}/followers")
+    suspend fun followers(
+        @Path("slug") slug: String,
+        @Path("id") id: String,
+        @Query("limit") limit: Int?,
+        @Query("offset") offset: Int?,
+    ): Response<FollowRelationResponse>
 }
