@@ -8,6 +8,7 @@ import io.getstream.feed.client.Actor
 import io.getstream.feed.client.EnrichActivity
 import io.getstream.feed.client.FeedActivity
 import io.getstream.feed.client.FeedID
+import io.getstream.feed.client.FollowRelation
 import io.getstream.feed.client.NetworkError
 import io.getstream.feed.client.StreamAPIError
 import io.getstream.feed.client.StreamError
@@ -19,6 +20,8 @@ import io.getstream.feed.client.internal.api.models.DownstreamActivityDto
 import io.getstream.feed.client.internal.api.models.DownstreamActivitySealedDto
 import io.getstream.feed.client.internal.api.models.DownstreamEnrichActivityDto
 import io.getstream.feed.client.internal.api.models.ErrorResponse
+import io.getstream.feed.client.internal.api.models.FollowRelationDto
+import io.getstream.feed.client.internal.api.models.FollowRelationResponse
 import io.getstream.feed.client.internal.api.models.UpstreamActivityDto
 import retrofit2.Response
 
@@ -97,6 +100,15 @@ internal fun EnrichActivity.toDTO(): UpstreamActivityDto =
 
 internal fun CreateActivitiesResponse.toDomain(): List<FeedActivity> =
     activities.map(DownstreamActivitySealedDto::toDomain)
+
+internal fun FollowRelationResponse.toDomain(): List<FollowRelation> =
+    followRelations.map(FollowRelationDto::toDomain)
+
+internal fun FollowRelationDto.toDomain(): FollowRelation =
+    FollowRelation(
+        sourceFeedID = sourceFeedID.toFeedID(),
+        targetFeedID = targetFeedID.toFeedID(),
+    )
 
 internal fun <T> Response<T>.obtainEntity(): Either<StreamError, T> = when (isSuccessful) {
     true -> body().rightIfNotNull { toError() }
