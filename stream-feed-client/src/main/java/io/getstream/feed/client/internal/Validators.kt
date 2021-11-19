@@ -13,6 +13,9 @@ import io.getstream.feed.client.IncompatibleParamsError
 import io.getstream.feed.client.InvalidParamError
 import io.getstream.feed.client.NegativeParamError
 import io.getstream.feed.client.ParamError
+import io.getstream.feed.client.RemoveActivityByForeignId
+import io.getstream.feed.client.RemoveActivityById
+import io.getstream.feed.client.RemoveActivityParams
 import io.getstream.feed.client.UnfollowParams
 
 internal fun GetActivitiesParams.validate(): Either<ParamError, GetActivitiesParams> = when {
@@ -54,5 +57,11 @@ internal fun FollowedParams.validate(): Either<ParamError, FollowedParams> = whe
 internal fun FollowersParams.validate(): Either<ParamError, FollowersParams> = when {
     limit?.let { it < 0 } == true -> NegativeParamError("limit can't be negative").left()
     offset?.let { it < 0 } == true -> NegativeParamError("offset can't be negative").left()
+    else -> this.right()
+}
+
+internal fun RemoveActivityParams.validate(): Either<ParamError, RemoveActivityParams> = when {
+    (this as? RemoveActivityById)?.activityId?.isBlank() == true -> EmptyParamError("activityId can't be empty").left()
+    (this as? RemoveActivityByForeignId)?.foreignId?.isBlank() == true -> EmptyParamError("foreignId can't be empty").left()
     else -> this.right()
 }
