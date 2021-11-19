@@ -6,6 +6,7 @@ import io.getstream.feed.client.internal.api.FeedApi
 import io.getstream.feed.client.internal.api.models.ActivitiesRequest
 import io.getstream.feed.client.internal.api.models.ActivitiesResponse
 import io.getstream.feed.client.internal.api.models.CreateActivitiesResponse
+import io.getstream.feed.client.internal.api.models.FollowRelationResponse
 import io.getstream.feed.client.internal.api.models.FollowRequest
 import io.getstream.feed.client.internal.obtainEntity
 import io.getstream.feed.client.internal.toDTO
@@ -105,7 +106,7 @@ class FlatFeed internal constructor(
                 .bind()
         }
 
-    suspend fun followed(params: FollowedParams.() -> Unit): Either<StreamError, Unit> =
+    suspend fun followed(params: FollowedParams.() -> Unit): Either<StreamError, List<FollowRelation>> =
         either {
             val followedParams = FollowedParams()
                 .apply(params)
@@ -117,6 +118,7 @@ class FlatFeed internal constructor(
                 limit = followedParams.limit,
                 offset = followedParams.offset,
             ).obtainEntity()
+                .map(FollowRelationResponse::toDomain)
                 .bind()
         }
 }
