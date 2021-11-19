@@ -15,6 +15,11 @@ class UnfollowParams {
         get() = this::targetFeedID.isInitialized
 }
 
+class FollowedParams {
+    var limit: Int? = null
+    var offset: Int? = null
+}
+
 class GetActivitiesParams {
     var limit: Int = 25
     var offset: Int? = null
