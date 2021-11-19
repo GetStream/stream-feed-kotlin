@@ -67,6 +67,12 @@ internal data class DownstreamEnrichActivityDto(
     override val extraData: MutableMap<String, Any> = mutableMapOf(),
 ) : DownstreamActivitySealedDto()
 
+@JsonClass(generateAdapter = true)
+internal data class FollowRelationDto(
+    @Json(name = "feed_id") val sourceFeedID: String,
+    @Json(name = "target_id") val targetFeedID: String,
+)
+
 internal abstract class CustomExtraDTOs {
     abstract val extraData: MutableMap<String, Any>
 }
