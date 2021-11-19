@@ -25,6 +25,10 @@ class FollowersParams {
     var offset: Int? = null
 }
 
+sealed class RemoveActivityParams
+data class RemoveActivityById(val activityId: String) : RemoveActivityParams()
+data class RemoveActivityByForeignId(val foreignId: String) : RemoveActivityParams()
+
 class GetActivitiesParams {
     var limit: Int = 25
     var offset: Int? = null
