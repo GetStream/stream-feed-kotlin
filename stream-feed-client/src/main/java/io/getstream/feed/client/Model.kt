@@ -49,3 +49,11 @@ data class FollowRelation(
     val sourceFeedID: FeedID,
     val targetFeedID: FeedID,
 )
+
+data class AggregatedActivitiesGroup(
+    val id: String,
+    val activities: List<FeedActivity>,
+    val verb: String,
+    val group: String,
+    val actorCount: Int,
+)
