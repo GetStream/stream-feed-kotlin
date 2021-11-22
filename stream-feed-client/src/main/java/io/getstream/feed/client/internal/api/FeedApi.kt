@@ -1,7 +1,6 @@
 package io.getstream.feed.client.internal.api
 
 import io.getstream.feed.client.internal.api.models.ActivitiesRequest
-import io.getstream.feed.client.internal.api.models.ActivitiesResponse
 import io.getstream.feed.client.internal.api.models.CreateActivitiesResponse
 import io.getstream.feed.client.internal.api.models.FollowRelationResponse
 import io.getstream.feed.client.internal.api.models.FollowRequest
@@ -14,38 +13,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 internal interface FeedApi {
-
-    @GET("/api/v1.0/enrich/feed/{slug}/{id}")
-    suspend fun enrichActivities(
-        @Path("slug") slug: String,
-        @Path("id") id: String,
-        @Query("limit") limit: Int,
-        @Query("offset") offset: Int?,
-        @Query("id_gt") idGreaterThan: String?,
-        @Query("id_lt") idSmallerThan: String?,
-        @Query("id_gte") idGreaterThanOrEqual: String?,
-        @Query("id_lte") idSmallerThanOrEqual: String?,
-        @Query("withRecentReactions") withRecentReactions: Boolean,
-        @Query("withOwnReactions") withOwnReactions: Boolean,
-        @Query("withReactionCounts") withReactionCounts: Boolean,
-        @Query("recentReactionsLimit") recentReactionsLimit: Int?,
-    ): Response<ActivitiesResponse>
-
-    @GET("/api/v1.0/feed/{slug}/{id}")
-    suspend fun activities(
-        @Path("slug") slug: String,
-        @Path("id") id: String,
-        @Query("limit") limit: Int,
-        @Query("offset") offset: Int?,
-        @Query("id_gt") idGreaterThan: String?,
-        @Query("id_lt") idSmallerThan: String?,
-        @Query("id_gte") idGreaterThanOrEqual: String?,
-        @Query("id_lte") idSmallerThanOrEqual: String?,
-        @Query("withRecentReactions") withRecentReactions: Boolean,
-        @Query("withOwnReactions") withOwnReactions: Boolean,
-        @Query("withReactionCounts") withReactionCounts: Boolean,
-        @Query("recentReactionsLimit") recentReactionsLimit: Int?,
-    ): Response<ActivitiesResponse>
 
     @POST("/api/v1.0/feed/{slug}/{id}")
     suspend fun sendActivities(
