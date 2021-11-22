@@ -26,3 +26,8 @@ internal data class ErrorResponse(
 internal data class FollowRelationResponse(
     @Json(name = "results") val followRelations: List<FollowRelationDto>
 )
+
+@JsonClass(generateAdapter = true)
+internal data class AggregatedActivitiesGroupResponse(
+    @Json(name = "results") val activitiesGroups: List<AggregatedActivitiesGroupDto>,
+)
