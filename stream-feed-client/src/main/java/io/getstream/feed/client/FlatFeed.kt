@@ -2,22 +2,22 @@ package io.getstream.feed.client
 
 import arrow.core.Either
 import arrow.core.computations.either
-import io.getstream.feed.client.internal.api.FeedApi
+import io.getstream.feed.client.internal.api.FlatFeedApi
 import io.getstream.feed.client.internal.api.models.ActivitiesResponse
 import io.getstream.feed.client.internal.obtainEntity
 import io.getstream.feed.client.internal.toDomain
 import io.getstream.feed.client.internal.validate
 
 class FlatFeed internal constructor(
-    private val feedApi: FeedApi,
+    private val flatFeedApi: FlatFeedApi,
     private val feedID: FeedID,
-) : Feed(feedApi, feedID) {
+) : Feed(flatFeedApi, feedID) {
 
     suspend fun getActivities(params: GetActivitiesParams.() -> Unit = {}): Either<StreamError, List<FeedActivity>> =
         either {
             val getActivitiesParams = GetActivitiesParams().apply(params).validate().bind()
             when (getActivitiesParams.enrich) {
-                true -> feedApi.activities(
+                true -> flatFeedApi.activities(
                     slug = feedID.slug,
                     id = feedID.userID,
                     limit = getActivitiesParams.limit,
@@ -31,7 +31,7 @@ class FlatFeed internal constructor(
                     withReactionCounts = getActivitiesParams.withReactionCounts,
                     recentReactionsLimit = getActivitiesParams.recentReactionsLimit,
                 )
-                false -> feedApi.enrichActivities(
+                false -> flatFeedApi.enrichActivities(
                     slug = feedID.slug,
                     id = feedID.userID,
                     limit = getActivitiesParams.limit,
