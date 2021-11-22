@@ -1,6 +1,8 @@
 import io.getstream.feed.Configuration
 import io.getstream.feed.Dependencies
 
+import java.text.SimpleDateFormat
+
 plugins {
     id 'java-library'
     id 'kotlin'
@@ -24,6 +26,19 @@ test {
     useJUnitPlatform()
     testLogging {
         events("passed", "skipped", "failed")
+    }
+}
+
+tasks.named('jar') {
+    manifest {
+        attributes["Implementation-Build-Date"] = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date())
+        attributes["Implementation-Title"] = "stream-feed-client"
+        attributes["Implementation-Vendor"] = "GetStream"
+        attributes["Implementation-Vendor-Id"] = Configuration.artifactGroup
+        attributes["Implementation-Version"] = rootVersionName
+        attributes["Created-By"] = "Gradle ${gradle.gradleVersion}"
+        attributes["Build-Jdk"] = "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})"
+        attributes["Build-OS"] = "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}"
     }
 }
 
