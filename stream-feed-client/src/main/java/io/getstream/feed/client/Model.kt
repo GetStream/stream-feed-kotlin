@@ -57,3 +57,13 @@ data class AggregatedActivitiesGroup(
     val group: String,
     val actorCount: Int,
 )
+
+data class NotificationActivitiesGroup(
+    val id: String,
+    val activities: List<FeedActivity>,
+    val verb: String,
+    val group: String,
+    val actorCount: Int,
+    val isRead: Boolean,
+    val isSeen: Boolean,
+)
