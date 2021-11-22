@@ -11,6 +11,7 @@ import io.getstream.feed.client.FeedActivity
 import io.getstream.feed.client.FeedID
 import io.getstream.feed.client.FollowRelation
 import io.getstream.feed.client.NetworkError
+import io.getstream.feed.client.NotificationActivitiesGroup
 import io.getstream.feed.client.StreamAPIError
 import io.getstream.feed.client.StreamError
 import io.getstream.feed.client.internal.api.adapters.FeedMoshiConverterFactory
@@ -25,6 +26,8 @@ import io.getstream.feed.client.internal.api.models.DownstreamEnrichActivityDto
 import io.getstream.feed.client.internal.api.models.ErrorResponse
 import io.getstream.feed.client.internal.api.models.FollowRelationDto
 import io.getstream.feed.client.internal.api.models.FollowRelationResponse
+import io.getstream.feed.client.internal.api.models.NotificationActivitiesGroupDto
+import io.getstream.feed.client.internal.api.models.NotificationsActivitiesGroupResponse
 import io.getstream.feed.client.internal.api.models.UpstreamActivityDto
 import retrofit2.Response
 
@@ -123,6 +126,20 @@ internal fun AggregatedActivitiesGroupDto.toDomain(): AggregatedActivitiesGroup 
         verb = verb,
         group = group,
         actorCount = actorCount,
+    )
+
+internal fun NotificationsActivitiesGroupResponse.toDomain(): List<NotificationActivitiesGroup> =
+    activitiesGroups.map(NotificationActivitiesGroupDto::toDomain)
+
+internal fun NotificationActivitiesGroupDto.toDomain(): NotificationActivitiesGroup =
+    NotificationActivitiesGroup(
+        id = id,
+        activities = activities.map(DownstreamActivitySealedDto::toDomain),
+        verb = verb,
+        group = group,
+        actorCount = actorCount,
+        isRead = isRead,
+        isSeen = isSeen,
     )
 
 internal fun <T> Response<T>.obtainEntity(): Either<StreamError, T> = when (isSuccessful) {
