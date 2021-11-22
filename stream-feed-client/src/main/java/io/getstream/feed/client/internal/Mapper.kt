@@ -5,6 +5,7 @@ import arrow.core.left
 import arrow.core.rightIfNotNull
 import io.getstream.feed.client.Activity
 import io.getstream.feed.client.Actor
+import io.getstream.feed.client.AggregatedActivitiesGroup
 import io.getstream.feed.client.EnrichActivity
 import io.getstream.feed.client.FeedActivity
 import io.getstream.feed.client.FeedID
@@ -15,6 +16,8 @@ import io.getstream.feed.client.StreamError
 import io.getstream.feed.client.internal.api.adapters.FeedMoshiConverterFactory
 import io.getstream.feed.client.internal.api.models.ActivitiesResponse
 import io.getstream.feed.client.internal.api.models.ActorDto
+import io.getstream.feed.client.internal.api.models.AggregatedActivitiesGroupDto
+import io.getstream.feed.client.internal.api.models.AggregatedActivitiesGroupResponse
 import io.getstream.feed.client.internal.api.models.CreateActivitiesResponse
 import io.getstream.feed.client.internal.api.models.DownstreamActivityDto
 import io.getstream.feed.client.internal.api.models.DownstreamActivitySealedDto
@@ -108,6 +111,18 @@ internal fun FollowRelationDto.toDomain(): FollowRelation =
     FollowRelation(
         sourceFeedID = sourceFeedID.toFeedID(),
         targetFeedID = targetFeedID.toFeedID(),
+    )
+
+internal fun AggregatedActivitiesGroupResponse.toDomain(): List<AggregatedActivitiesGroup> =
+    activitiesGroups.map(AggregatedActivitiesGroupDto::toDomain)
+
+internal fun AggregatedActivitiesGroupDto.toDomain(): AggregatedActivitiesGroup =
+    AggregatedActivitiesGroup(
+        id = id,
+        activities = activities.map(DownstreamActivitySealedDto::toDomain),
+        verb = verb,
+        group = group,
+        actorCount = actorCount,
     )
 
 internal fun <T> Response<T>.obtainEntity(): Either<StreamError, T> = when (isSuccessful) {
