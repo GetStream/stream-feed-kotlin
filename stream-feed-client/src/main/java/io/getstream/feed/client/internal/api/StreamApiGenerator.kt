@@ -3,6 +3,7 @@ package io.getstream.feed.client.internal.api
 import com.moczul.ok2curl.CurlInterceptor
 import io.getstream.feed.client.internal.api.adapters.FeedMoshiConverterFactory
 import io.getstream.feed.client.internal.api.interceptors.ApiKeyInterceptor
+import io.getstream.feed.client.internal.api.interceptors.SDKVersionInterceptor
 import io.getstream.feed.client.internal.api.interceptors.TokenAuthInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -18,6 +19,7 @@ internal class StreamApiGenerator(
             .client(
                 OkHttpClient.Builder()
                     .addInterceptor(ApiKeyInterceptor(apiKey))
+                    .addInterceptor(SDKVersionInterceptor(getVersion()))
                     .addInterceptor(TokenAuthInterceptor { userToken })
                     .addInterceptor(HttpLoggingInterceptor(::println).setLevel(HttpLoggingInterceptor.Level.BODY))
                     .addInterceptor(CurlInterceptor(::println))
@@ -26,6 +28,8 @@ internal class StreamApiGenerator(
             .addConverterFactory(FeedMoshiConverterFactory)
             .build()
     }
+
+    private fun getVersion(): String = "stream-feed-kotlin-${this::class.java.`package`.implementationVersion}"
 
     val flatFeedApi: FlatFeedApi by lazy { retrofit.create(FlatFeedApi::class.java) }
     val notificationFeedApi: NotificationFeedApi by lazy { retrofit.create(NotificationFeedApi::class.java) }
