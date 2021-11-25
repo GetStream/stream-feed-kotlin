@@ -96,3 +96,8 @@ internal data class NotificationActivitiesGroupDto(
 internal abstract class CustomExtraDTOs {
     abstract val extraData: MutableMap<String, Any>
 }
+
+internal data class DataDto(
+    val id: String,
+    val data: Map<String, Any>,
+)
