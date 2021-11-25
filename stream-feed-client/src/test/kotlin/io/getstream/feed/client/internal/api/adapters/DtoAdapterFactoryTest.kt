@@ -2,17 +2,13 @@ package io.getstream.feed.client.internal.api.adapters
 
 import io.getstream.feed.client.JSONMother.toIdStringJsonString
 import io.getstream.feed.client.JSONMother.toJsonString
-import io.getstream.feed.client.Mother.randomActorDto
 import io.getstream.feed.client.Mother.randomDataDto
 import io.getstream.feed.client.Mother.randomDownstreamActivityDto
-import io.getstream.feed.client.Mother.randomDownstreamEnrichActivityDto
 import io.getstream.feed.client.Mother.randomUpstreamActivityDto
+import io.getstream.feed.client.internal.api.adapters.DtoAdapterFactoryTest.Companion.fromJsonArgs
 import io.getstream.feed.client.internal.api.models.ActivitySealedDto
-import io.getstream.feed.client.internal.api.models.ActorDto
 import io.getstream.feed.client.internal.api.models.DataDto
 import io.getstream.feed.client.internal.api.models.DownstreamActivityDto
-import io.getstream.feed.client.internal.api.models.DownstreamActivitySealedDto
-import io.getstream.feed.client.internal.api.models.DownstreamEnrichActivityDto
 import io.getstream.feed.client.internal.api.models.UpstreamActivityDto
 import org.amshove.kluent.`should be equal to`
 import org.junit.jupiter.params.ParameterizedTest
@@ -56,9 +52,6 @@ internal class DtoAdapterFactoryTest {
 
         @JvmStatic
         fun toJsonArgs() = listOf(
-            randomActorDto(extraData = extraData).let {
-                Arguments.of(ActorDto::class.java, it, it.toJsonString(extraDataJsonString))
-            },
             randomUpstreamActivityDto(extraData = extraData).let {
                 Arguments.of(UpstreamActivityDto::class.java, it, it.toJsonString(extraDataJsonString))
             },
@@ -69,18 +62,6 @@ internal class DtoAdapterFactoryTest {
                 Arguments.of(DownstreamActivityDto::class.java, it, it.toJsonString(extraDataJsonString))
             },
             randomDownstreamActivityDto(extraData = extraData).let {
-                Arguments.of(DownstreamActivitySealedDto::class.java, it, it.toJsonString(extraDataJsonString))
-            },
-            randomDownstreamActivityDto(extraData = extraData).let {
-                Arguments.of(ActivitySealedDto::class.java, it, it.toJsonString(extraDataJsonString))
-            },
-            randomDownstreamEnrichActivityDto(extraData = extraData).let {
-                Arguments.of(DownstreamEnrichActivityDto::class.java, it, it.toJsonString(extraDataJsonString))
-            },
-            randomDownstreamEnrichActivityDto(extraData = extraData).let {
-                Arguments.of(DownstreamActivitySealedDto::class.java, it, it.toJsonString(extraDataJsonString))
-            },
-            randomDownstreamEnrichActivityDto(extraData = extraData).let {
                 Arguments.of(ActivitySealedDto::class.java, it, it.toJsonString(extraDataJsonString))
             },
             randomDataDto(data = extraData).let {
@@ -90,12 +71,6 @@ internal class DtoAdapterFactoryTest {
 
         @JvmStatic
         fun fromJsonArgs() = listOf(
-            randomActorDto(extraData = extraData).let {
-                Arguments.of(ActorDto::class.java, it.toJsonString(extraDataJsonString), it)
-            },
-            randomActorDto(extraData = extraData).let {
-                Arguments.of(ActorDto::class.java, it.toJsonString(extraDataJsonStringWithNullValues), it)
-            },
             randomDownstreamActivityDto(extraData = extraData).let {
                 Arguments.of(DownstreamActivityDto::class.java, it.toJsonString(extraDataJsonString), it)
             },
@@ -103,33 +78,9 @@ internal class DtoAdapterFactoryTest {
                 Arguments.of(DownstreamActivityDto::class.java, it.toJsonString(extraDataJsonStringWithNullValues), it)
             },
             randomDownstreamActivityDto(extraData = extraData).let {
-                Arguments.of(DownstreamActivitySealedDto::class.java, it.toJsonString(extraDataJsonString), it)
-            },
-            randomDownstreamActivityDto(extraData = extraData).let {
-                Arguments.of(DownstreamActivitySealedDto::class.java, it.toJsonString(extraDataJsonStringWithNullValues), it)
-            },
-            randomDownstreamActivityDto(extraData = extraData).let {
                 Arguments.of(ActivitySealedDto::class.java, it.toJsonString(extraDataJsonString), it)
             },
             randomDownstreamActivityDto(extraData = extraData).let {
-                Arguments.of(ActivitySealedDto::class.java, it.toJsonString(extraDataJsonStringWithNullValues), it)
-            },
-            randomDownstreamEnrichActivityDto(extraData = extraData).let {
-                Arguments.of(DownstreamEnrichActivityDto::class.java, it.toJsonString(extraDataJsonString), it)
-            },
-            randomDownstreamEnrichActivityDto(extraData = extraData).let {
-                Arguments.of(DownstreamEnrichActivityDto::class.java, it.toJsonString(extraDataJsonStringWithNullValues), it)
-            },
-            randomDownstreamEnrichActivityDto(extraData = extraData).let {
-                Arguments.of(DownstreamActivitySealedDto::class.java, it.toJsonString(extraDataJsonString), it)
-            },
-            randomDownstreamEnrichActivityDto(extraData = extraData).let {
-                Arguments.of(DownstreamActivitySealedDto::class.java, it.toJsonString(extraDataJsonStringWithNullValues), it)
-            },
-            randomDownstreamEnrichActivityDto(extraData = extraData).let {
-                Arguments.of(ActivitySealedDto::class.java, it.toJsonString(extraDataJsonString), it)
-            },
-            randomDownstreamEnrichActivityDto(extraData = extraData).let {
                 Arguments.of(ActivitySealedDto::class.java, it.toJsonString(extraDataJsonStringWithNullValues), it)
             },
             randomDataDto().let { Arguments.of(DataDto::class.java, it.toIdStringJsonString(), it) },

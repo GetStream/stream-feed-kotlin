@@ -3,7 +3,6 @@ package io.getstream.feed.client
 import arrow.core.Either
 import arrow.core.computations.either
 import io.getstream.feed.client.internal.api.FlatFeedApi
-import io.getstream.feed.client.internal.api.models.ActivitiesResponse
 import io.getstream.feed.client.internal.obtainEntity
 import io.getstream.feed.client.internal.toDomain
 import io.getstream.feed.client.internal.validate
@@ -47,7 +46,7 @@ class FlatFeed internal constructor(
                 )
             }
                 .obtainEntity()
-                .map(ActivitiesResponse::toDomain)
+                .map { it.toDomain(getActivitiesParams.enrich) }
                 .bind()
         }
 }

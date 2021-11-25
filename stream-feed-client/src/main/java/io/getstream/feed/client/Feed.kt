@@ -4,7 +4,6 @@ import arrow.core.Either
 import arrow.core.computations.either
 import io.getstream.feed.client.internal.api.FeedApi
 import io.getstream.feed.client.internal.api.models.ActivitiesRequest
-import io.getstream.feed.client.internal.api.models.CreateActivitiesResponse
 import io.getstream.feed.client.internal.api.models.FollowRelationResponse
 import io.getstream.feed.client.internal.api.models.FollowRequest
 import io.getstream.feed.client.internal.obtainEntity
@@ -30,7 +29,7 @@ abstract class Feed internal constructor(
             id = feedID.userID,
             activities = activitiesRequest
         ).obtainEntity()
-            .map(CreateActivitiesResponse::toDomain)
+            .map { it.toDomain(false) }
             .bind()
     }
 

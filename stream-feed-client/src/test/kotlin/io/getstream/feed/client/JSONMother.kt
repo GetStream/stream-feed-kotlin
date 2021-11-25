@@ -1,10 +1,8 @@
 package io.getstream.feed.client
 
 import io.getstream.feed.client.internal.api.models.ActivitiesRequest
-import io.getstream.feed.client.internal.api.models.ActorDto
 import io.getstream.feed.client.internal.api.models.DataDto
 import io.getstream.feed.client.internal.api.models.DownstreamActivityDto
-import io.getstream.feed.client.internal.api.models.DownstreamEnrichActivityDto
 import io.getstream.feed.client.internal.api.models.UpdateActivitiesRequest
 import io.getstream.feed.client.internal.api.models.UpdateActivityByForeignIdRequest
 import io.getstream.feed.client.internal.api.models.UpdateActivityByIdRequest
@@ -12,19 +10,6 @@ import io.getstream.feed.client.internal.api.models.UpdateActivityRequest
 import io.getstream.feed.client.internal.api.models.UpstreamActivityDto
 
 internal object JSONMother {
-
-    fun ActorDto.toJsonString(extraDataJsonString: String? = null): String = """
-            {
-            "id" : "$id",
-            "data" : 
-                {
-                "handle": "${data.handle}",
-                "name": "${data.name}",
-                "profileImage": "${data.profileImage}"
-                },
-            ${extraDataJsonString ?: ""} 
-            }
-    """.trimIndent().sanitizeJson()
 
     fun UpstreamActivityDto.toJsonString(extraDataJsonString: String? = null): String = """
         {
@@ -42,24 +27,10 @@ internal object JSONMother {
     fun DownstreamActivityDto.toJsonString(extraDataJsonString: String? = null): String = """
         {
         "id": "$id",
-        "actor" : "$actor",
-        "object" : "$objectProperty",
+        "actor" : ${actor.toIdStringJsonString()},
+        "object" : ${objectProperty.toIdStringJsonString()},
         "verb" : "$verb",
-        ${target?.let { "\"target\" : \"$it\"," } ?: ""}
-        ${time?.let { "\"time\" : \"$it\"," } ?: ""}
-        ${to?.let { "\"to\" : ${it.toJsonArrayString { "\"$it\"" }}," } ?: ""}
-        ${foreignId?.let { "\"foreign_id\" : \"$it\","} ?: ""}
-        ${extraDataJsonString ?: ""} 
-        }
-    """.trimIndent().sanitizeJson()
-
-    fun DownstreamEnrichActivityDto.toJsonString(extraDataJsonString: String? = null): String = """
-        {
-        "id": "$id",
-        "actor" : ${actor.toJsonString("")},
-        "object" : "$objectProperty",
-        "verb" : "$verb",
-        ${target?.let { "\"target\" : \"$it\"," } ?: ""}
+        ${target?.let { "\"target\" : ${it.toIdStringJsonString()}," } ?: ""}
         ${time?.let { "\"time\" : \"$it\"," } ?: ""}
         ${to?.let { "\"to\" : ${it.toJsonArrayString { "\"$it\"" }}," } ?: ""}
         ${foreignId?.let { "\"foreign_id\" : \"$it\","} ?: ""}
