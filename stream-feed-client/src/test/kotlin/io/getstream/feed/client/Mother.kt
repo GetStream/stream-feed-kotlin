@@ -3,6 +3,7 @@ package io.getstream.feed.client
 import io.getstream.feed.client.internal.api.models.ActivitiesRequest
 import io.getstream.feed.client.internal.api.models.ActorDataDto
 import io.getstream.feed.client.internal.api.models.ActorDto
+import io.getstream.feed.client.internal.api.models.DataDto
 import io.getstream.feed.client.internal.api.models.DownstreamActivityDto
 import io.getstream.feed.client.internal.api.models.DownstreamEnrichActivityDto
 import io.getstream.feed.client.internal.api.models.UpdateActivitiesRequest
@@ -176,6 +177,11 @@ internal object Mother {
             )
         }
     )
+
+    fun randomDataDto(
+        id: String = randomString(),
+        data: Map<String, Any> = emptyMap(),
+    ): DataDto = DataDto(id, data)
 
     fun randomUpdateActivitiesRequest(
         updates: List<UpdateActivityRequest> = randomListOf { randomUpdateActivityRequest() }

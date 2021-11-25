@@ -2,6 +2,7 @@ package io.getstream.feed.client
 
 import io.getstream.feed.client.internal.api.models.ActivitiesRequest
 import io.getstream.feed.client.internal.api.models.ActorDto
+import io.getstream.feed.client.internal.api.models.DataDto
 import io.getstream.feed.client.internal.api.models.DownstreamActivityDto
 import io.getstream.feed.client.internal.api.models.DownstreamEnrichActivityDto
 import io.getstream.feed.client.internal.api.models.UpdateActivitiesRequest
@@ -99,6 +100,15 @@ internal object JSONMother {
         "activities": ${activities.toJsonArrayString { it.toJsonString() }}
         }
     """.trimIndent()
+
+    fun DataDto.toIdStringJsonString(): String = "\"$id\""
+
+    fun DataDto.toJsonString(dataJsonString: String? = null): String = """
+        {
+            "id" : "$id",
+            ${dataJsonString?.let { "\"data\":{$it}" } ?: ""} 
+            }
+    """.trimIndent().sanitizeJson()
 
     private fun <T> List<T>.toJsonArrayString(transform: (T) -> String): String = """[${joinToString(",", transform = transform)}]"""
 
