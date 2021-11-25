@@ -5,12 +5,12 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class ActivitiesResponse(
-    @Json(name = "results") val activities: List<DownstreamActivitySealedDto>,
+    @Json(name = "results") val activities: List<DownstreamActivityDto>,
 )
 
 @JsonClass(generateAdapter = true)
 internal data class CreateActivitiesResponse(
-    @Json(name = "activities") val activities: List<DownstreamActivitySealedDto>,
+    @Json(name = "activities") val activities: List<DownstreamActivityDto>,
 )
 
 @JsonClass(generateAdapter = true)

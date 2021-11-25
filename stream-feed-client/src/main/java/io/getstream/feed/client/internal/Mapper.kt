@@ -12,17 +12,17 @@ import io.getstream.feed.client.FeedID
 import io.getstream.feed.client.FollowRelation
 import io.getstream.feed.client.NetworkError
 import io.getstream.feed.client.NotificationActivitiesGroup
+import io.getstream.feed.client.Object
 import io.getstream.feed.client.StreamAPIError
 import io.getstream.feed.client.StreamError
+import io.getstream.feed.client.Target
 import io.getstream.feed.client.internal.api.adapters.FeedMoshiConverterFactory
 import io.getstream.feed.client.internal.api.models.ActivitiesResponse
-import io.getstream.feed.client.internal.api.models.ActorDto
 import io.getstream.feed.client.internal.api.models.AggregatedActivitiesGroupDto
 import io.getstream.feed.client.internal.api.models.AggregatedActivitiesGroupResponse
 import io.getstream.feed.client.internal.api.models.CreateActivitiesResponse
+import io.getstream.feed.client.internal.api.models.DataDto
 import io.getstream.feed.client.internal.api.models.DownstreamActivityDto
-import io.getstream.feed.client.internal.api.models.DownstreamActivitySealedDto
-import io.getstream.feed.client.internal.api.models.DownstreamEnrichActivityDto
 import io.getstream.feed.client.internal.api.models.ErrorResponse
 import io.getstream.feed.client.internal.api.models.FollowRelationDto
 import io.getstream.feed.client.internal.api.models.FollowRelationResponse
@@ -31,49 +31,40 @@ import io.getstream.feed.client.internal.api.models.NotificationsActivitiesGroup
 import io.getstream.feed.client.internal.api.models.UpstreamActivityDto
 import retrofit2.Response
 
-internal fun ActorDto.toDomain(): Actor =
-    Actor(
+private fun DataDto.toActorDomain(): Actor = Actor(id = id, data = data)
+private fun DataDto.toObjectDomain(): Object = Object(id = id, data = data)
+private fun DataDto.toTargetDomain(): Target = Target(id = id, data = data)
+
+internal fun DownstreamActivityDto.toDomain(enrich: Boolean): FeedActivity = when (enrich) {
+    true -> EnrichActivity(
         id = id,
-        handle = data.handle,
-        name = data.name,
-        profileImage = data.profileImage,
+        actor = actor.toActorDomain(),
+        `object` = objectProperty.toObjectDomain(),
+        verb = verb,
+        target = target?.toTargetDomain(),
+        to = to?.map { it.toFeedID() } ?: listOf(),
+        time = time ?: "",
+        foreignId = foreignId,
         extraData = extraData
     )
-
-internal fun DownstreamActivitySealedDto.toDomain(): FeedActivity = when (this) {
-    is DownstreamActivityDto -> toDomain()
-    is DownstreamEnrichActivityDto -> toDomain()
+    false -> Activity(
+        id = id,
+        actor = actor.id,
+        `object` = objectProperty.id,
+        verb = verb,
+        target = target?.id,
+        to = to?.map { it.toFeedID() } ?: listOf(),
+        time = time ?: "",
+        foreignId = foreignId,
+        extraData = extraData
+    )
 }
-
-internal fun DownstreamActivityDto.toDomain(): Activity =
-    Activity(
-        id = id,
-        actor = actor,
-        `object` = objectProperty,
-        verb = verb,
-        to = to?.map { it.toFeedID() } ?: listOf(),
-        time = time ?: "",
-        foreignId = foreignId,
-        extraData = extraData
-    )
-
-internal fun DownstreamEnrichActivityDto.toDomain(): EnrichActivity =
-    EnrichActivity(
-        id = id,
-        actor = actor.toDomain(),
-        `object` = objectProperty,
-        verb = verb,
-        to = to?.map { it.toFeedID() } ?: listOf(),
-        time = time ?: "",
-        foreignId = foreignId,
-        extraData = extraData
-    )
 
 private fun String.toFeedID(): FeedID = split(":").let { FeedID(it[0], it[1]) }
 internal fun FeedID.toStringFeedID(): String = "$slug:$userID"
 
-internal fun ActivitiesResponse.toDomain(): List<FeedActivity> =
-    activities.map { it.toDomain() }
+internal fun ActivitiesResponse.toDomain(enrich: Boolean): List<FeedActivity> =
+    activities.map { it.toDomain(enrich) }
 
 internal fun FeedActivity.toDTO(): UpstreamActivityDto = when (this) {
     is Activity -> toDTO()
@@ -85,7 +76,7 @@ internal fun Activity.toDTO(): UpstreamActivityDto =
         actor = actor,
         objectProperty = `object`,
         verb = verb,
-        target = null,
+        target = target,
         time = time.takeUnless(String::isBlank),
         to = to.map(FeedID::toStringFeedID).takeUnless(List<String>::isEmpty),
         foreignId = foreignId,
@@ -95,17 +86,17 @@ internal fun Activity.toDTO(): UpstreamActivityDto =
 internal fun EnrichActivity.toDTO(): UpstreamActivityDto =
     UpstreamActivityDto(
         actor = actor.id,
-        objectProperty = `object`,
+        objectProperty = `object`.id,
         verb = verb,
-        target = null,
+        target = target?.id,
         time = time.takeUnless(String::isBlank),
         to = to.map(FeedID::toStringFeedID).takeUnless(List<String>::isEmpty),
         foreignId = foreignId,
         extraData = extraData.toMutableMap(),
     )
 
-internal fun CreateActivitiesResponse.toDomain(): List<FeedActivity> =
-    activities.map(DownstreamActivitySealedDto::toDomain)
+internal fun CreateActivitiesResponse.toDomain(enrich: Boolean): List<FeedActivity> =
+    activities.map { it.toDomain(enrich) }
 
 internal fun FollowRelationResponse.toDomain(): List<FollowRelation> =
     followRelations.map(FollowRelationDto::toDomain)
@@ -116,25 +107,25 @@ internal fun FollowRelationDto.toDomain(): FollowRelation =
         targetFeedID = targetFeedID.toFeedID(),
     )
 
-internal fun AggregatedActivitiesGroupResponse.toDomain(): List<AggregatedActivitiesGroup> =
-    activitiesGroups.map(AggregatedActivitiesGroupDto::toDomain)
+internal fun AggregatedActivitiesGroupResponse.toDomain(enrich: Boolean): List<AggregatedActivitiesGroup> =
+    activitiesGroups.map { it.toDomain(enrich) }
 
-internal fun AggregatedActivitiesGroupDto.toDomain(): AggregatedActivitiesGroup =
+internal fun AggregatedActivitiesGroupDto.toDomain(enrich: Boolean): AggregatedActivitiesGroup =
     AggregatedActivitiesGroup(
         id = id,
-        activities = activities.map(DownstreamActivitySealedDto::toDomain),
+        activities = activities.map { it.toDomain(enrich) },
         verb = verb,
         group = group,
         actorCount = actorCount,
     )
 
-internal fun NotificationsActivitiesGroupResponse.toDomain(): List<NotificationActivitiesGroup> =
-    activitiesGroups.map(NotificationActivitiesGroupDto::toDomain)
+internal fun NotificationsActivitiesGroupResponse.toDomain(enrich: Boolean): List<NotificationActivitiesGroup> =
+    activitiesGroups.map { it.toDomain(enrich) }
 
-internal fun NotificationActivitiesGroupDto.toDomain(): NotificationActivitiesGroup =
+internal fun NotificationActivitiesGroupDto.toDomain(enrich: Boolean): NotificationActivitiesGroup =
     NotificationActivitiesGroup(
         id = id,
-        activities = activities.map(DownstreamActivitySealedDto::toDomain),
+        activities = activities.map { it.toDomain(enrich) },
         verb = verb,
         group = group,
         actorCount = actorCount,

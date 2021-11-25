@@ -7,15 +7,21 @@ data class FeedID(
 
 class Actor(
     val id: String,
-    val handle: String,
-    val name: String,
-    val profileImage: String = "",
-    val extraData: Map<String, Any> = emptyMap()
+    val data: Map<String, Any> = emptyMap(),
+)
+
+class Object(
+    val id: String,
+    val data: Map<String, Any> = emptyMap(),
+)
+
+class Target(
+    val id: String,
+    val data: Map<String, Any> = emptyMap(),
 )
 
 sealed class FeedActivity {
     abstract val id: String
-    abstract val `object`: String
     abstract val verb: String
     abstract val to: List<FeedID>
     abstract val time: String
@@ -26,8 +32,9 @@ sealed class FeedActivity {
 data class Activity(
     override val id: String = "",
     val actor: String,
-    override val `object`: String,
+    val `object`: String,
     override val verb: String,
+    val target: String? = null,
     override val to: List<FeedID> = emptyList(),
     override val time: String = "",
     override val foreignId: String? = null,
@@ -37,9 +44,10 @@ data class Activity(
 data class EnrichActivity(
     override val id: String = "",
     val actor: Actor,
-    override val `object`: String,
+    val `object`: Object,
     override val verb: String,
     override val to: List<FeedID> = emptyList(),
+    val target: Target? = null,
     override val time: String = "",
     override val foreignId: String? = null,
     override val extraData: Map<String, Any> = emptyMap()
