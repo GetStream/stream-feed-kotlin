@@ -1,12 +1,15 @@
 package io.getstream.feed.client.internal.api.adapters
 
+import io.getstream.feed.client.JSONMother.toIdStringJsonString
 import io.getstream.feed.client.JSONMother.toJsonString
 import io.getstream.feed.client.Mother.randomActorDto
+import io.getstream.feed.client.Mother.randomDataDto
 import io.getstream.feed.client.Mother.randomDownstreamActivityDto
 import io.getstream.feed.client.Mother.randomDownstreamEnrichActivityDto
 import io.getstream.feed.client.Mother.randomUpstreamActivityDto
 import io.getstream.feed.client.internal.api.models.ActivitySealedDto
 import io.getstream.feed.client.internal.api.models.ActorDto
+import io.getstream.feed.client.internal.api.models.DataDto
 import io.getstream.feed.client.internal.api.models.DownstreamActivityDto
 import io.getstream.feed.client.internal.api.models.DownstreamActivitySealedDto
 import io.getstream.feed.client.internal.api.models.DownstreamEnrichActivityDto
@@ -80,6 +83,9 @@ internal class DtoAdapterFactoryTest {
             randomDownstreamEnrichActivityDto(extraData = extraData).let {
                 Arguments.of(ActivitySealedDto::class.java, it, it.toJsonString(extraDataJsonString))
             },
+            randomDataDto(data = extraData).let {
+                Arguments.of(DataDto::class.java, it, it.toIdStringJsonString())
+            },
         )
 
         @JvmStatic
@@ -125,6 +131,15 @@ internal class DtoAdapterFactoryTest {
             },
             randomDownstreamEnrichActivityDto(extraData = extraData).let {
                 Arguments.of(ActivitySealedDto::class.java, it.toJsonString(extraDataJsonStringWithNullValues), it)
+            },
+            randomDataDto().let { Arguments.of(DataDto::class.java, it.toIdStringJsonString(), it) },
+            randomDataDto().let { Arguments.of(DataDto::class.java, it.toJsonString(), it) },
+            randomDataDto().let { Arguments.of(DataDto::class.java, it.toJsonString("    "), it) },
+            randomDataDto(data = extraData).let {
+                Arguments.of(DataDto::class.java, it.toJsonString(extraDataJsonString), it)
+            },
+            randomDataDto(data = extraData).let {
+                Arguments.of(DataDto::class.java, it.toJsonString(extraDataJsonStringWithNullValues), it)
             },
         )
     }

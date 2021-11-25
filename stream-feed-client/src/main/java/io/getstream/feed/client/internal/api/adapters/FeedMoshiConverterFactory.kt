@@ -13,6 +13,7 @@ object FeedMoshiConverterFactory : Converter.Factory() {
     internal val moshi: Moshi by lazy {
         Moshi.Builder()
             .add(CustomExtraDTOsAdapterFactory)
+            .add(DataDtoAdapterFactory)
             .add(ActivityAdapterFactory)
             .add(UpdateActivityBodyAdapterFactory)
             .build()
