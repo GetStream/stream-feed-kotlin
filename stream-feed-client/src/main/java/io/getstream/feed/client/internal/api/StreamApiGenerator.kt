@@ -34,4 +34,5 @@ internal class StreamApiGenerator(
     val flatFeedApi: FlatFeedApi by lazy { retrofit.create(FlatFeedApi::class.java) }
     val notificationFeedApi: NotificationFeedApi by lazy { retrofit.create(NotificationFeedApi::class.java) }
     val aggregatedFeedApi: AggregatedFeedApi by lazy { retrofit.create(AggregatedFeedApi::class.java) }
+    val activityApi: ActivityApi by lazy { retrofit.create(ActivityApi::class.java) }
 }
