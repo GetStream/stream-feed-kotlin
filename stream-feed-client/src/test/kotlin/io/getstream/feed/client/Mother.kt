@@ -23,6 +23,9 @@ internal object Mother {
         }
     }
 
+    tailrec fun <T> randomDifferentThan(value: T, randomGen: () -> T): T =
+        randomGen().takeUnless { it == value } ?: randomDifferentThan(value, randomGen)
+
     fun randomBoolean(): Boolean = random.nextBoolean()
 
     fun <T> oneOf(vararg randomGen: () -> T): T = randomGen.random().invoke()
