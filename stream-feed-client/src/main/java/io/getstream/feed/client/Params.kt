@@ -47,3 +47,19 @@ class GetActivitiesParams {
         recentReactionsLimit = limit
     }
 }
+
+class FindActivitiesParams {
+    var activitiesIds: List<String> = emptyList()
+    var foreignIds: List<String> = emptyList()
+    var timestamps: List<String> = emptyList()
+    var withOwnReactions: Boolean = false
+    var withReactionCounts: Boolean = false
+    internal var withRecentReactions: Boolean = false
+    internal var recentReactionsLimit: Int? = null
+    var enrich: Boolean = false
+
+    fun withRecentReactions(limit: Int? = null) = apply {
+        withRecentReactions = true
+        recentReactionsLimit = limit
+    }
+}
