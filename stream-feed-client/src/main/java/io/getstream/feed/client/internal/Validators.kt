@@ -5,6 +5,7 @@ import arrow.core.left
 import arrow.core.right
 import io.getstream.feed.client.EmptyParamError
 import io.getstream.feed.client.FeedActivity
+import io.getstream.feed.client.FindActivitiesParams
 import io.getstream.feed.client.FollowParams
 import io.getstream.feed.client.FollowedParams
 import io.getstream.feed.client.FollowersParams
@@ -63,5 +64,14 @@ internal fun FollowersParams.validate(): Either<ParamError, FollowersParams> = w
 internal fun RemoveActivityParams.validate(): Either<ParamError, RemoveActivityParams> = when {
     (this as? RemoveActivityById)?.activityId?.isBlank() == true -> EmptyParamError("activityId can't be empty").left()
     (this as? RemoveActivityByForeignId)?.foreignId?.isBlank() == true -> EmptyParamError("foreignId can't be empty").left()
+    else -> this.right()
+}
+
+internal fun FindActivitiesParams.validate(): Either<ParamError, FindActivitiesParams> = when {
+    activitiesIds.size > 100 -> InvalidParamError("activitiesIds can't be bigger than 100").left()
+    foreignIds.size > 100 -> InvalidParamError("foreignIds can't be bigger than 100").left()
+    timestamps.size > 100 -> InvalidParamError("timestamps can't be bigger than 100").left()
+    foreignIds.size != timestamps.size -> IncompatibleParamsError("foreignIds length must match timestamps length").left()
+    recentReactionsLimit?.let { it < 0 } == true -> NegativeParamError("recentReactionsLimit can't be negative").left()
     else -> this.right()
 }
