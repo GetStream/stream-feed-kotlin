@@ -4,7 +4,9 @@ import arrow.core.Either
 import arrow.core.computations.either
 import io.getstream.feed.client.internal.api.ActivityApi
 import io.getstream.feed.client.internal.api.models.CommaSeparatedQueryParams
+import io.getstream.feed.client.internal.api.models.UpdateActivitiesResponse
 import io.getstream.feed.client.internal.obtainEntity
+import io.getstream.feed.client.internal.toDTO
 import io.getstream.feed.client.internal.toDomain
 import io.getstream.feed.client.internal.validate
 
@@ -37,6 +39,27 @@ class ActivityClient internal constructor(
             }
                 .obtainEntity()
                 .map { it.toDomain(findActivitiesParams.enrich) }
+                .bind()
+        }
+
+    suspend fun partialUpdateActivityById(params: UpdateActivityByIdParams.() -> Unit = {}): Either<StreamError, FeedActivity> =
+        partialUpdateActivity(UpdateActivityByIdParams().apply(params))
+
+    suspend fun partialUpdateActivityByForeignId(params: UpdateActivityByForeignIdParams.() -> Unit = {}): Either<StreamError, FeedActivity> =
+        partialUpdateActivity(UpdateActivityByForeignIdParams().apply(params))
+
+    suspend fun partialUpdateActivity(params: UpdateActivityParams): Either<StreamError, FeedActivity> =
+        partialUpdateActivities(listOf(params)).map(List<FeedActivity>::first)
+
+    suspend fun partialUpdateActivities(params: List<UpdateActivityParams>): Either<StreamError, List<FeedActivity>> =
+        either {
+            params.validate()
+                .map {
+                    activityApi.updateActivities(it.toDTO())
+                        .obtainEntity()
+                        .map(UpdateActivitiesResponse::toDomain)
+                        .bind()
+                }
                 .bind()
         }
 }
