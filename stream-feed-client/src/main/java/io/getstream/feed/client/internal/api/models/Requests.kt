@@ -27,7 +27,7 @@ internal data class UpdateActivityByForeignIdRequest(
 
 @JsonClass(generateAdapter = true)
 internal data class UpdateActivitiesRequest(
-    @Json(name = "changes") val udpates: List<UpdateActivityRequest>
+    @Json(name = "changes") val updates: List<UpdateActivityRequest>
 )
 
 @JsonClass(generateAdapter = true)

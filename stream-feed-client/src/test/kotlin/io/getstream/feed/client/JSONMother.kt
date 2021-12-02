@@ -62,7 +62,7 @@ internal object JSONMother {
 
     fun UpdateActivitiesRequest.toJsonString(): String = """
         {
-        "changes": ${udpates.toJsonArrayString { it.toJsonString() }}
+        "changes": ${updates.toJsonArrayString { it.toJsonString() }}
         }
     """.trimIndent()
 
