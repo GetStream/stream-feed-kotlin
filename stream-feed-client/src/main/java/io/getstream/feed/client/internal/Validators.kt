@@ -1,6 +1,7 @@
 package io.getstream.feed.client.internal
 
 import arrow.core.Either
+import arrow.core.computations.either
 import arrow.core.left
 import arrow.core.right
 import io.getstream.feed.client.EmptyParamError
@@ -18,6 +19,9 @@ import io.getstream.feed.client.RemoveActivityByForeignId
 import io.getstream.feed.client.RemoveActivityById
 import io.getstream.feed.client.RemoveActivityParams
 import io.getstream.feed.client.UnfollowParams
+import io.getstream.feed.client.UpdateActivityByForeignIdParams
+import io.getstream.feed.client.UpdateActivityByIdParams
+import io.getstream.feed.client.UpdateActivityParams
 
 internal fun GetActivitiesParams.validate(): Either<ParamError, GetActivitiesParams> = when {
     limit < 0 -> NegativeParamError("limit can't be negative").left()
@@ -73,5 +77,26 @@ internal fun FindActivitiesParams.validate(): Either<ParamError, FindActivitiesP
     timestamps.size > 100 -> InvalidParamError("timestamps can't be bigger than 100").left()
     foreignIds.size != timestamps.size -> IncompatibleParamsError("foreignIds length must match timestamps length").left()
     recentReactionsLimit?.let { it < 0 } == true -> NegativeParamError("recentReactionsLimit can't be negative").left()
+    else -> this.right()
+}
+
+@JvmName("validateUpdateActivityParams")
+internal fun List<UpdateActivityParams>.validate(): Either<ParamError, List<UpdateActivityParams>> = when {
+    size <= 0 -> EmptyParamError("The list of updateActivities can't be empty").left()
+    else -> either.eager { this@validate.map { it.validate().bind() } }
+}
+
+internal fun UpdateActivityParams.validate(): Either<ParamError, UpdateActivityParams> = when (this) {
+    is UpdateActivityByForeignIdParams -> this.validate()
+    is UpdateActivityByIdParams -> this.validate()
+}
+
+internal fun UpdateActivityByIdParams.validate(): Either<ParamError, UpdateActivityByIdParams> = when {
+    !isInitialized -> EmptyParamError("activityId property need to be initialized").left()
+    else -> this.right()
+}
+
+internal fun UpdateActivityByForeignIdParams.validate(): Either<ParamError, UpdateActivityByForeignIdParams> = when {
+    !isInitialized -> EmptyParamError("foreignId and time properties need to be initialized").left()
     else -> this.right()
 }
