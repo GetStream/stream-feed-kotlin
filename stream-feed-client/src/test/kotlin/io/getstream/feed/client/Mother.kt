@@ -13,8 +13,8 @@ import kotlin.random.Random
 internal object Mother {
     private val random = Random(System.currentTimeMillis())
     private val charPool: CharArray = (('a'..'z') + ('A'..'Z') + ('0'..'9')).toCharArray()
-    fun positiveRandomInt(maxInt: Int = Int.MAX_VALUE - 2): Int =
-        random.nextInt(maxInt + 2) + 1
+    fun positiveRandomInt(maxInt: Int = Int.MAX_VALUE): Int =
+        random.nextInt(maxInt) + 1
     fun negativeRandomInt(minInt: Int = Int.MIN_VALUE): Int =
         random.nextInt(minInt, 0)
     fun randomString(size: Int = 20): String = buildString(capacity = size) {
