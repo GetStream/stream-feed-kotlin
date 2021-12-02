@@ -14,6 +14,11 @@ internal data class CreateActivitiesResponse(
 )
 
 @JsonClass(generateAdapter = true)
+internal data class UpdateActivitiesResponse(
+    @Json(name = "activities") val activities: List<DownstreamActivityDto>,
+)
+
+@JsonClass(generateAdapter = true)
 internal data class ErrorResponse(
     @Json(name = "detail") val detail: String,
     @Json(name = "status_code") val statusCode: Int,
