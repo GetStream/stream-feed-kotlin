@@ -63,3 +63,25 @@ class FindActivitiesParams {
         recentReactionsLimit = limit
     }
 }
+
+class UpdateActivityByIdParams : UpdateActivityParams() {
+    lateinit var activityId: String
+    override var set: Map<String, Any> = emptyMap()
+    override var unset: List<String> = emptyList()
+    internal val isInitialized
+        get() = this::activityId.isInitialized
+}
+
+class UpdateActivityByForeignIdParams : UpdateActivityParams() {
+    lateinit var foreignId: String
+    lateinit var time: String
+    override var set: Map<String, Any> = emptyMap()
+    override var unset: List<String> = emptyList()
+    internal val isInitialized
+        get() = this::foreignId.isInitialized && this::time.isInitialized
+}
+
+sealed class UpdateActivityParams {
+    abstract var set: Map<String, Any>
+    abstract var unset: List<String>
+}
