@@ -16,6 +16,9 @@ import io.getstream.feed.client.Object
 import io.getstream.feed.client.StreamAPIError
 import io.getstream.feed.client.StreamError
 import io.getstream.feed.client.Target
+import io.getstream.feed.client.UpdateActivityByForeignIdParams
+import io.getstream.feed.client.UpdateActivityByIdParams
+import io.getstream.feed.client.UpdateActivityParams
 import io.getstream.feed.client.internal.api.adapters.FeedMoshiConverterFactory
 import io.getstream.feed.client.internal.api.models.ActivitiesResponse
 import io.getstream.feed.client.internal.api.models.AggregatedActivitiesGroupDto
@@ -28,6 +31,11 @@ import io.getstream.feed.client.internal.api.models.FollowRelationDto
 import io.getstream.feed.client.internal.api.models.FollowRelationResponse
 import io.getstream.feed.client.internal.api.models.NotificationActivitiesGroupDto
 import io.getstream.feed.client.internal.api.models.NotificationsActivitiesGroupResponse
+import io.getstream.feed.client.internal.api.models.UpdateActivitiesRequest
+import io.getstream.feed.client.internal.api.models.UpdateActivitiesResponse
+import io.getstream.feed.client.internal.api.models.UpdateActivityByForeignIdRequest
+import io.getstream.feed.client.internal.api.models.UpdateActivityByIdRequest
+import io.getstream.feed.client.internal.api.models.UpdateActivityRequest
 import io.getstream.feed.client.internal.api.models.UpstreamActivityDto
 import retrofit2.Response
 
@@ -63,6 +71,9 @@ internal fun DownstreamActivityDto.toDomain(enrich: Boolean): FeedActivity = whe
 private fun String.toFeedID(): FeedID = split(":").let { FeedID(it[0], it[1]) }
 internal fun FeedID.toStringFeedID(): String = "$slug:$userID"
 
+internal fun UpdateActivitiesResponse.toDomain(): List<FeedActivity> =
+    activities.map { it.toDomain(true) }
+
 internal fun ActivitiesResponse.toDomain(enrich: Boolean): List<FeedActivity> =
     activities.map { it.toDomain(enrich) }
 
@@ -93,6 +104,31 @@ internal fun EnrichActivity.toDTO(): UpstreamActivityDto =
         to = to.map(FeedID::toStringFeedID).takeUnless(List<String>::isEmpty),
         foreignId = foreignId,
         extraData = extraData.toMutableMap(),
+    )
+
+internal fun List<UpdateActivityParams>.toDTO(): UpdateActivitiesRequest =
+    UpdateActivitiesRequest(
+        updates = this.map(UpdateActivityParams::toDTO)
+    )
+
+internal fun UpdateActivityParams.toDTO(): UpdateActivityRequest = when (this) {
+    is UpdateActivityByForeignIdParams -> this.toDTO()
+    is UpdateActivityByIdParams -> this.toDTO()
+}
+
+internal fun UpdateActivityByIdParams.toDTO(): UpdateActivityByIdRequest =
+    UpdateActivityByIdRequest(
+        id = activityId,
+        set = set,
+        unset = unset
+    )
+
+internal fun UpdateActivityByForeignIdParams.toDTO(): UpdateActivityByForeignIdRequest =
+    UpdateActivityByForeignIdRequest(
+        foreignId = foreignId,
+        time = time,
+        set = set,
+        unset = unset
     )
 
 internal fun CreateActivitiesResponse.toDomain(enrich: Boolean): List<FeedActivity> =
