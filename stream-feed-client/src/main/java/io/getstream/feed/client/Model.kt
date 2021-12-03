@@ -20,6 +20,13 @@ class Target(
     val data: Map<String, Any> = emptyMap(),
 )
 
+data class CollectionData(
+    val id: String,
+    val name: String,
+    val foreignId: String? = null,
+    val data: Map<String, Any> = emptyMap(),
+)
+
 sealed class FeedActivity {
     abstract val id: String
     abstract val verb: String
