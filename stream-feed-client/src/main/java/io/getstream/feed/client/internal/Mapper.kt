@@ -6,6 +6,7 @@ import arrow.core.rightIfNotNull
 import io.getstream.feed.client.Activity
 import io.getstream.feed.client.Actor
 import io.getstream.feed.client.AggregatedActivitiesGroup
+import io.getstream.feed.client.CollectionData
 import io.getstream.feed.client.EnrichActivity
 import io.getstream.feed.client.FeedActivity
 import io.getstream.feed.client.FeedID
@@ -23,6 +24,8 @@ import io.getstream.feed.client.internal.api.adapters.FeedMoshiConverterFactory
 import io.getstream.feed.client.internal.api.models.ActivitiesResponse
 import io.getstream.feed.client.internal.api.models.AggregatedActivitiesGroupDto
 import io.getstream.feed.client.internal.api.models.AggregatedActivitiesGroupResponse
+import io.getstream.feed.client.internal.api.models.CollectionDto
+import io.getstream.feed.client.internal.api.models.CollectionRequest
 import io.getstream.feed.client.internal.api.models.CreateActivitiesResponse
 import io.getstream.feed.client.internal.api.models.DataDto
 import io.getstream.feed.client.internal.api.models.DownstreamActivityDto
@@ -167,6 +170,21 @@ internal fun NotificationActivitiesGroupDto.toDomain(enrich: Boolean): Notificat
         actorCount = actorCount,
         isRead = isRead,
         isSeen = isSeen,
+    )
+
+internal fun CollectionDto.toDomain(): CollectionData =
+    CollectionData(
+        id = id,
+        name = name,
+        foreignId = foreignId,
+        data = data
+    )
+
+internal fun CollectionData.toDTO(userId: String): CollectionRequest =
+    CollectionRequest(
+        id = id,
+        userId = userId,
+        data = data,
     )
 
 internal fun <T> Response<T>.obtainEntity(): Either<StreamError, T> = when (isSuccessful) {
