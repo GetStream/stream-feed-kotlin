@@ -29,4 +29,15 @@ class CollectionsClient internal constructor(
             .map(CollectionDto::toDomain)
             .bind()
     }
+
+    suspend fun update(collectionData: CollectionData): Either<StreamError, CollectionData> = either {
+        collectionsApi.updateCollection(
+            collectionData.name,
+            collectionData.id,
+            collectionData.toDTO(userID)
+        )
+            .obtainEntity()
+            .map(CollectionDto::toDomain)
+            .bind()
+    }
 }
