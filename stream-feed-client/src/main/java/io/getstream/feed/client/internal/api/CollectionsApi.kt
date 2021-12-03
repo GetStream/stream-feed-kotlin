@@ -6,6 +6,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 internal interface CollectionsApi {
@@ -20,5 +21,12 @@ internal interface CollectionsApi {
     suspend fun getCollection(
         @Path("collectionName") collectionName: String,
         @Path("collectionId") collectionId: String,
+    ): Response<CollectionDto>
+
+    @PUT("/api/v1.0/collections/{collectionName}/{collectionId}")
+    suspend fun updateCollection(
+        @Path("collectionName") collectionName: String,
+        @Path("collectionId") collectionId: String,
+        @Body collectionRequest: CollectionRequest,
     ): Response<CollectionDto>
 }
