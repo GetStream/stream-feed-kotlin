@@ -22,4 +22,11 @@ class CollectionsClient internal constructor(
             .map(CollectionDto::toDomain)
             .bind()
     }
+
+    suspend fun get(collectionName: String, collectionId: String): Either<StreamError, CollectionData> = either {
+        collectionsApi.getCollection(collectionName, collectionId)
+            .obtainEntity()
+            .map(CollectionDto::toDomain)
+            .bind()
+    }
 }
