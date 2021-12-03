@@ -40,3 +40,10 @@ internal data class FollowRequest(
     @Json(name = "target") val targetFeedId: String,
     @Json(name = "activity_copy_limit") val activityCopyLimit: Int?,
 )
+
+@JsonClass(generateAdapter = true)
+internal data class CollectionRequest(
+    @Json(name = "data") val data: Map<String, Any>,
+    @Json(name = "user_id") val userId: String,
+    @Json(name = "id") val id: String,
+)

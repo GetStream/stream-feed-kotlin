@@ -61,6 +61,14 @@ internal data class NotificationActivitiesGroupDto(
     @Json(name = "verb") val verb: String,
 )
 
+@JsonClass(generateAdapter = true)
+internal data class CollectionDto(
+    @Json(name = "id") val id: String,
+    @Json(name = "collection") val name: String,
+    @Json(name = "foreign_id") val foreignId: String,
+    @Json(name = "data") val data: Map<String, Any>
+)
+
 internal abstract class CustomExtraDTOs {
     abstract val extraData: MutableMap<String, Any>
 }
