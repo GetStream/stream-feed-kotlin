@@ -40,4 +40,10 @@ class CollectionsClient internal constructor(
             .map(CollectionDto::toDomain)
             .bind()
     }
+
+    suspend fun delete(collectionName: String, collectionId: String): Either<StreamError, Unit> = either {
+        collectionsApi.deleteCollection(collectionName, collectionId)
+            .obtainEntity()
+            .bind()
+    }
 }
