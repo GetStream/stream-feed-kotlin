@@ -4,6 +4,7 @@ import io.getstream.feed.client.internal.api.models.CollectionDto
 import io.getstream.feed.client.internal.api.models.CollectionRequest
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -13,5 +14,11 @@ internal interface CollectionsApi {
     suspend fun addCollection(
         @Path("collectionName") collectionName: String,
         @Body collectionRequest: CollectionRequest,
+    ): Response<CollectionDto>
+
+    @GET("/api/v1.0/collections/{collectionName}/{collectionId}")
+    suspend fun getCollection(
+        @Path("collectionName") collectionName: String,
+        @Path("collectionId") collectionId: String,
     ): Response<CollectionDto>
 }
