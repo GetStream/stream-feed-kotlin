@@ -8,6 +8,7 @@ public class StreamClient private constructor(private val streamApiGenerator: St
     fun flatFeed(feedID: FeedID): FlatFeed = FlatFeed(streamApiGenerator.flatFeedApi, feedID = feedID)
     fun notificationFeed(feedID: FeedID): NotificationFeed = NotificationFeed(streamApiGenerator.notificationFeedApi, feedID = feedID)
     fun aggregatedFeed(feedID: FeedID): AggregatedFeed = AggregatedFeed(streamApiGenerator.aggregatedFeedApi, feedID = feedID)
+    fun collectionsClient(userID: String): CollectionsClient = CollectionsClient(streamApiGenerator.collectionsApi, userID)
 
     companion object {
 
