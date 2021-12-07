@@ -162,6 +162,16 @@ internal object Mother {
         }
     )
 
+    fun randomReaction(
+        id: String = randomString(),
+        kind: String = randomString(),
+        activityId: String = randomString(),
+        targetFeeds: List<FeedID> = randomListOf { randomFeedID() },
+        data: Map<String, Any> = emptyMap(),
+        targetFeedsExtraData: Map<String, Any> = emptyMap(),
+    ): Reaction =
+        Reaction(id, kind, activityId, targetFeeds, data, targetFeedsExtraData)
+
     fun randomDataDto(
         id: String = randomString(),
         data: Map<String, Any> = emptyMap(),
