@@ -14,6 +14,7 @@ import io.getstream.feed.client.FollowRelation
 import io.getstream.feed.client.NetworkError
 import io.getstream.feed.client.NotificationActivitiesGroup
 import io.getstream.feed.client.Object
+import io.getstream.feed.client.Reaction
 import io.getstream.feed.client.StreamAPIError
 import io.getstream.feed.client.StreamError
 import io.getstream.feed.client.Target
@@ -34,6 +35,8 @@ import io.getstream.feed.client.internal.api.models.FollowRelationDto
 import io.getstream.feed.client.internal.api.models.FollowRelationResponse
 import io.getstream.feed.client.internal.api.models.NotificationActivitiesGroupDto
 import io.getstream.feed.client.internal.api.models.NotificationsActivitiesGroupResponse
+import io.getstream.feed.client.internal.api.models.ReactionDto
+import io.getstream.feed.client.internal.api.models.ReactionRequest
 import io.getstream.feed.client.internal.api.models.UpdateActivitiesRequest
 import io.getstream.feed.client.internal.api.models.UpdateActivitiesResponse
 import io.getstream.feed.client.internal.api.models.UpdateActivityByForeignIdRequest
@@ -170,6 +173,26 @@ internal fun NotificationActivitiesGroupDto.toDomain(enrich: Boolean): Notificat
         actorCount = actorCount,
         isRead = isRead,
         isSeen = isSeen,
+    )
+
+internal fun ReactionDto.toDomain(): Reaction =
+    Reaction(
+        id = id,
+        kind = kind,
+        activityId = activityId,
+        targetFeeds = targeFeeds?.map(String::toFeedID) ?: emptyList(),
+        data = data,
+        targetFeedsExtraData = targetFeedsExtraData ?: emptyMap(),
+    )
+
+internal fun Reaction.toDTO(userId: String): ReactionRequest =
+    ReactionRequest(
+        kind = kind,
+        activityId = activityId,
+        userId = userId,
+        extraData = data.takeUnless(Map<String, Any>::isEmpty),
+        targeFeeds = targetFeeds.map(FeedID::toStringFeedID).takeUnless(List<String>::isEmpty),
+        targetFeedsExtraData = targetFeedsExtraData.takeUnless(Map<String, Any>::isEmpty),
     )
 
 internal fun CollectionDto.toDomain(): CollectionData =
