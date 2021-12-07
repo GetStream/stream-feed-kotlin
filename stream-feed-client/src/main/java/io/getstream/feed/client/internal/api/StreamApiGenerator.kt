@@ -36,4 +36,5 @@ internal class StreamApiGenerator(
     val aggregatedFeedApi: AggregatedFeedApi by lazy { retrofit.create(AggregatedFeedApi::class.java) }
     val activityApi: ActivityApi by lazy { retrofit.create(ActivityApi::class.java) }
     val collectionsApi: CollectionsApi by lazy { retrofit.create(CollectionsApi::class.java) }
+    val reactionApi: ReactionApi by lazy { retrofit.create(ReactionApi::class.java) }
 }

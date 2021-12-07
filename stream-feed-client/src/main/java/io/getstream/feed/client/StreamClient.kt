@@ -9,6 +9,7 @@ public class StreamClient private constructor(private val streamApiGenerator: St
     fun notificationFeed(feedID: FeedID): NotificationFeed = NotificationFeed(streamApiGenerator.notificationFeedApi, feedID = feedID)
     fun aggregatedFeed(feedID: FeedID): AggregatedFeed = AggregatedFeed(streamApiGenerator.aggregatedFeedApi, feedID = feedID)
     fun collectionsClient(userID: String): CollectionsClient = CollectionsClient(streamApiGenerator.collectionsApi, userID)
+    fun reactionClient(userID: String): ReactionsClient = ReactionsClient(streamApiGenerator.reactionApi, userID)
 
     companion object {
 
