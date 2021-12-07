@@ -15,6 +15,7 @@ import io.getstream.feed.client.IncompatibleParamsError
 import io.getstream.feed.client.InvalidParamError
 import io.getstream.feed.client.NegativeParamError
 import io.getstream.feed.client.ParamError
+import io.getstream.feed.client.Reaction
 import io.getstream.feed.client.RemoveActivityByForeignId
 import io.getstream.feed.client.RemoveActivityById
 import io.getstream.feed.client.RemoveActivityParams
@@ -38,6 +39,12 @@ internal fun GetActivitiesParams.validate(): Either<ParamError, GetActivitiesPar
 
 internal fun List<FeedActivity>.validate(): Either<ParamError, List<FeedActivity>> = when {
     size <= 0 -> EmptyParamError("The list of activities can't be empty").left()
+    else -> this.right()
+}
+
+internal fun Reaction.validate(): Either<ParamError, Reaction> = when {
+    kind.isBlank() -> EmptyParamError("kind can't be empty").left()
+    activityId.isBlank() -> EmptyParamError("activityId can't be empty").left()
     else -> this.right()
 }
 
