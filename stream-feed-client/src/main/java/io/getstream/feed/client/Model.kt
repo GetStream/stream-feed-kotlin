@@ -73,6 +73,15 @@ data class AggregatedActivitiesGroup(
     val actorCount: Int,
 )
 
+data class Reaction(
+    val id: String = "",
+    val kind: String,
+    val activityId: String,
+    val targetFeeds: List<FeedID> = emptyList(),
+    val data: Map<String, Any> = emptyMap(),
+    val targetFeedsExtraData: Map<String, Any> = emptyMap(),
+)
+
 data class NotificationActivitiesGroup(
     val id: String,
     val activities: List<FeedActivity>,
