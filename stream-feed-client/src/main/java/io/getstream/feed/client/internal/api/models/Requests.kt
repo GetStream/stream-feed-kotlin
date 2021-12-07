@@ -47,3 +47,13 @@ internal data class CollectionRequest(
     @Json(name = "user_id") val userId: String,
     @Json(name = "id") val id: String,
 )
+
+@JsonClass(generateAdapter = true)
+internal data class ReactionRequest(
+    @Json(name = "kind") val kind: String,
+    @Json(name = "activity_id") val activityId: String,
+    @Json(name = "user_id") val userId: String,
+    @Json(name = "data") val extraData: Map<String, Any>?,
+    @Json(name = "target_feeds") val targeFeeds: List<String>?,
+    @Json(name = "target_feeds_extra_data") val targetFeedsExtraData: Map<String, Any>?
+)

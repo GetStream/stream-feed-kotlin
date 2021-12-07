@@ -69,6 +69,21 @@ internal data class CollectionDto(
     @Json(name = "data") val data: Map<String, Any>
 )
 
+@JsonClass(generateAdapter = true)
+internal data class ReactionDto(
+    @Json(name = "id") val id: String,
+    @Json(name = "kind") val kind: String,
+    @Json(name = "activity_id") val activityId: String,
+    @Json(name = "user_id") val userId: String,
+    @Json(name = "user") val user: Map<String, Any>?,
+    @Json(name = "data") val data: Map<String, Any>,
+    @Json(name = "parent") val parent: String?,
+    @Json(name = "target_feeds") val targeFeeds: List<String>?,
+    @Json(name = "latest_children") val latestChildren: Map<String, Any>?,
+    @Json(name = "children_counts") val childrenCount: Map<String, Any>?,
+    @Json(name = "target_feeds_extra_data") val targetFeedsExtraData: Map<String, Any>?
+)
+
 internal abstract class CustomExtraDTOs {
     abstract val extraData: MutableMap<String, Any>
 }
