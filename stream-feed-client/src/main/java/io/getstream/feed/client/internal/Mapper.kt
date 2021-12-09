@@ -21,6 +21,7 @@ import io.getstream.feed.client.Target
 import io.getstream.feed.client.UpdateActivityByForeignIdParams
 import io.getstream.feed.client.UpdateActivityByIdParams
 import io.getstream.feed.client.UpdateActivityParams
+import io.getstream.feed.client.UpdateReactionParams
 import io.getstream.feed.client.internal.api.adapters.FeedMoshiConverterFactory
 import io.getstream.feed.client.internal.api.models.ActivitiesResponse
 import io.getstream.feed.client.internal.api.models.AggregatedActivitiesGroupDto
@@ -43,6 +44,7 @@ import io.getstream.feed.client.internal.api.models.UpdateActivitiesResponse
 import io.getstream.feed.client.internal.api.models.UpdateActivityByForeignIdRequest
 import io.getstream.feed.client.internal.api.models.UpdateActivityByIdRequest
 import io.getstream.feed.client.internal.api.models.UpdateActivityRequest
+import io.getstream.feed.client.internal.api.models.UpdateReactionRequest
 import io.getstream.feed.client.internal.api.models.UpstreamActivityDto
 import retrofit2.Response
 
@@ -86,6 +88,12 @@ internal fun UpdateActivitiesResponse.toDomain(): List<FeedActivity> =
 
 internal fun ActivitiesResponse.toDomain(enrich: Boolean): List<FeedActivity> =
     activities.map { it.toDomain(enrich) }
+
+internal fun UpdateReactionParams.toDTO(): UpdateReactionRequest =
+    UpdateReactionRequest(
+        data = data.takeUnless(Map<String, Any>::isEmpty),
+        targeFeeds = targetFeeds.map(FeedID::toStringFeedID).takeUnless(List<String>::isEmpty)
+    )
 
 internal fun FeedActivity.toDTO(): UpstreamActivityDto = when (this) {
     is Activity -> toDTO()
