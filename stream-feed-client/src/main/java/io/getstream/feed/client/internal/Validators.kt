@@ -6,6 +6,7 @@ import arrow.core.left
 import arrow.core.right
 import io.getstream.feed.client.EmptyParamError
 import io.getstream.feed.client.FeedActivity
+import io.getstream.feed.client.FilterReactionsParams
 import io.getstream.feed.client.FindActivitiesParams
 import io.getstream.feed.client.FollowParams
 import io.getstream.feed.client.FollowedParams
@@ -105,5 +106,17 @@ internal fun UpdateActivityByIdParams.validate(): Either<ParamError, UpdateActiv
 
 internal fun UpdateActivityByForeignIdParams.validate(): Either<ParamError, UpdateActivityByForeignIdParams> = when {
     !isInitialized -> EmptyParamError("foreignId and time properties need to be initialized").left()
+    else -> this.right()
+}
+
+internal fun FilterReactionsParams.validate(): Either<ParamError, FilterReactionsParams> = when {
+    !isInitialized -> EmptyParamError("lookup property need to be initialized").left()
+    limit < 0 -> NegativeParamError("limit can't be negative").left()
+    listOfNotNull(idGreaterThan, idGreaterThanOrEqual).size > 1 ->
+        IncompatibleParamsError("Passing both idGreaterThan and idGreaterThanOrEqual is not supported").left()
+    listOfNotNull(idSmallerThan, idSmallerThanOrEqual).size > 1 ->
+        IncompatibleParamsError("Passing both idSmallerThan and idSmallerThanOrEqual is not supported").left()
+    listOfNotNull(idGreaterThan, idGreaterThanOrEqual, idSmallerThan, idSmallerThanOrEqual).size > 1 ->
+        IncompatibleParamsError("Passing both idGreaterThan[OrEqual] and idSmallerThan[OrEqual] is not supported").left()
     else -> this.right()
 }
