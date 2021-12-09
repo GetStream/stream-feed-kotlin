@@ -57,3 +57,9 @@ internal data class ReactionRequest(
     @Json(name = "target_feeds") val targeFeeds: List<String>?,
     @Json(name = "target_feeds_extra_data") val targetFeedsExtraData: Map<String, Any>?
 )
+
+@JsonClass(generateAdapter = true)
+internal data class UpdateReactionRequest(
+    @Json(name = "data") val data: Map<String, Any>?,
+    @Json(name = "target_feeds") val targeFeeds: List<String>?,
+)
