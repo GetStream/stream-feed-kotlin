@@ -41,3 +41,8 @@ internal data class AggregatedActivitiesGroupResponse(
 internal data class NotificationsActivitiesGroupResponse(
     @Json(name = "results") val activitiesGroups: List<NotificationActivitiesGroupDto>,
 )
+
+@JsonClass(generateAdapter = true)
+internal data class FilterReactionsResponse(
+    @Json(name = "results") val reactions: List<ReactionDto>,
+)
