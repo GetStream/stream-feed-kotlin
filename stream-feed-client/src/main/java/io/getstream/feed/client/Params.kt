@@ -64,6 +64,15 @@ class FindActivitiesParams {
     }
 }
 
+class UpdateReactionParams {
+    lateinit var reactionId: String
+    var data: Map<String, Any> = emptyMap()
+    var targetFeeds: List<FeedID> = emptyList()
+
+    internal val isInitialized: Boolean
+        get() = this::reactionId.isInitialized
+}
+
 class UpdateActivityByIdParams : UpdateActivityParams() {
     lateinit var activityId: String
     override var set: Map<String, Any> = emptyMap()
