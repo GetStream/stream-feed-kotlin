@@ -48,4 +48,10 @@ class ReactionsClient internal constructor(
             .map(FilterReactionsResponse::toDomin)
             .bind()
     }
+
+    suspend fun delete(reactionId: String): Either<StreamError, Unit> = either {
+        reactionApi.deleteReaction(reactionId).obtainEntity().bind()
+    }
+
+    suspend fun delete(reaction: Reaction): Either<StreamError, Unit> = delete(reaction.id)
 }
