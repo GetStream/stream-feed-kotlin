@@ -187,6 +187,36 @@ internal object Mother {
     ): ActivitiesRequest =
         ActivitiesRequest(activities)
 
+    fun randomUserLookup(
+        id: String = randomString()
+    ): FilterReactionsParams.UserLookup =
+        FilterReactionsParams.UserLookup(id)
+
+    fun randomActivityLookup(
+        id: String = randomString(),
+        enrich: Boolean = randomBoolean(),
+    ): FilterReactionsParams.ActivityLookup =
+        FilterReactionsParams.ActivityLookup(id, enrich)
+
+    fun randomReactionLookup(
+        id: String = randomString()
+    ): FilterReactionsParams.ReactionLookup =
+        FilterReactionsParams.ReactionLookup(id)
+
+    fun randomLookup(): FilterReactionsParams.Lookup = oneOf(
+        ::randomUserLookup,
+        ::randomActivityLookup,
+        ::randomReactionLookup,
+    )
+
     fun createGetActivitiesParams(builder: GetActivitiesParams.() -> Unit = {}): GetActivitiesParams =
         GetActivitiesParams().apply(builder)
+
+    fun createFilterReactionsParams(
+        lookup: FilterReactionsParams.Lookup = randomLookup(),
+        builder: FilterReactionsParams.() -> Unit = {}
+    ): FilterReactionsParams = FilterReactionsParams().apply {
+        this.lookup = lookup
+        builder()
+    }
 }
