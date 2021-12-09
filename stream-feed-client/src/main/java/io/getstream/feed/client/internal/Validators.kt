@@ -24,6 +24,7 @@ import io.getstream.feed.client.UnfollowParams
 import io.getstream.feed.client.UpdateActivityByForeignIdParams
 import io.getstream.feed.client.UpdateActivityByIdParams
 import io.getstream.feed.client.UpdateActivityParams
+import io.getstream.feed.client.UpdateReactionParams
 
 internal fun GetActivitiesParams.validate(): Either<ParamError, GetActivitiesParams> = when {
     limit < 0 -> NegativeParamError("limit can't be negative").left()
@@ -118,5 +119,10 @@ internal fun FilterReactionsParams.validate(): Either<ParamError, FilterReaction
         IncompatibleParamsError("Passing both idSmallerThan and idSmallerThanOrEqual is not supported").left()
     listOfNotNull(idGreaterThan, idGreaterThanOrEqual, idSmallerThan, idSmallerThanOrEqual).size > 1 ->
         IncompatibleParamsError("Passing both idGreaterThan[OrEqual] and idSmallerThan[OrEqual] is not supported").left()
+    else -> this.right()
+}
+
+internal fun UpdateReactionParams.validate(): Either<ParamError, UpdateReactionParams> = when {
+    !isInitialized -> EmptyParamError("reactionId property need to be initialized").left()
     else -> this.right()
 }
