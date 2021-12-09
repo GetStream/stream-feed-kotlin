@@ -85,3 +85,23 @@ sealed class UpdateActivityParams {
     abstract var set: Map<String, Any>
     abstract var unset: List<String>
 }
+
+class FilterReactionsParams {
+    lateinit var lookup: Lookup
+    var kind: String = ""
+    var limit: Int = 10
+    var idGreaterThan: String? = null
+    var idGreaterThanOrEqual: String? = null
+    var idSmallerThan: String? = null
+    var idSmallerThanOrEqual: String? = null
+
+    internal val isInitialized: Boolean
+        get() = this::lookup.isInitialized
+
+    sealed class Lookup(internal val key: String) {
+        internal abstract val id: String
+    }
+    data class ActivityLookup(override val id: String, val enrich: Boolean = false) : Lookup("activity_id")
+    data class ReactionLookup(override val id: String) : Lookup("reaction_id")
+    data class UserLookup(override val id: String) : Lookup("user_id")
+}
