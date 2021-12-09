@@ -3,11 +3,13 @@ package io.getstream.feed.client.internal.api
 import io.getstream.feed.client.internal.api.models.FilterReactionsResponse
 import io.getstream.feed.client.internal.api.models.ReactionDto
 import io.getstream.feed.client.internal.api.models.ReactionRequest
+import io.getstream.feed.client.internal.api.models.UpdateReactionRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -35,4 +37,10 @@ internal interface ReactionApi {
     suspend fun deleteReaction(
         @Path("reactionId") reactionId: String,
     ): Response<Unit>
+
+    @PUT("/api/v1.0/reaction/{reactionId}")
+    suspend fun updateReaction(
+        @Path("reactionId") reactionId: String,
+        @Body updateReactionRequest: UpdateReactionRequest,
+    ): Response<ReactionDto>
 }
