@@ -54,4 +54,18 @@ class ReactionsClient internal constructor(
     }
 
     suspend fun delete(reaction: Reaction): Either<StreamError, Unit> = delete(reaction.id)
+
+    suspend fun update(params: UpdateReactionParams.() -> Unit = {}): Either<StreamError, Reaction> = either {
+        val updateReactionParams = UpdateReactionParams()
+            .apply(params)
+            .validate()
+            .bind()
+        reactionApi.updateReaction(
+            updateReactionParams.reactionId,
+            updateReactionParams.toDTO()
+        )
+            .obtainEntity()
+            .map(ReactionDto::toDomain)
+            .bind()
+    }
 }
