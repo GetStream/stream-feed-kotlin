@@ -31,6 +31,7 @@ import io.getstream.feed.client.internal.api.models.CreateActivitiesResponse
 import io.getstream.feed.client.internal.api.models.DataDto
 import io.getstream.feed.client.internal.api.models.DownstreamActivityDto
 import io.getstream.feed.client.internal.api.models.ErrorResponse
+import io.getstream.feed.client.internal.api.models.FilterReactionsResponse
 import io.getstream.feed.client.internal.api.models.FollowRelationDto
 import io.getstream.feed.client.internal.api.models.FollowRelationResponse
 import io.getstream.feed.client.internal.api.models.NotificationActivitiesGroupDto
@@ -76,6 +77,9 @@ internal fun DownstreamActivityDto.toDomain(enrich: Boolean): FeedActivity = whe
 
 private fun String.toFeedID(): FeedID = split(":").let { FeedID(it[0], it[1]) }
 internal fun FeedID.toStringFeedID(): String = "$slug:$userID"
+
+internal fun FilterReactionsResponse.toDomin(): List<Reaction> =
+    reactions.map(ReactionDto::toDomain)
 
 internal fun UpdateActivitiesResponse.toDomain(): List<FeedActivity> =
     activities.map { it.toDomain(true) }
