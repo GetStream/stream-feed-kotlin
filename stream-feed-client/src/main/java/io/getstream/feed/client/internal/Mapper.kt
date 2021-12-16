@@ -22,6 +22,7 @@ import io.getstream.feed.client.UpdateActivityByForeignIdParams
 import io.getstream.feed.client.UpdateActivityByIdParams
 import io.getstream.feed.client.UpdateActivityParams
 import io.getstream.feed.client.UpdateReactionParams
+import io.getstream.feed.client.User
 import io.getstream.feed.client.internal.api.adapters.FeedMoshiConverterFactory
 import io.getstream.feed.client.internal.api.models.ActivitiesResponse
 import io.getstream.feed.client.internal.api.models.AggregatedActivitiesGroupDto
@@ -46,6 +47,7 @@ import io.getstream.feed.client.internal.api.models.UpdateActivityByIdRequest
 import io.getstream.feed.client.internal.api.models.UpdateActivityRequest
 import io.getstream.feed.client.internal.api.models.UpdateReactionRequest
 import io.getstream.feed.client.internal.api.models.UpstreamActivityDto
+import io.getstream.feed.client.internal.api.models.UserDto
 import retrofit2.Response
 
 private fun DataDto.toActorDomain(): Actor = Actor(id = id, data = data)
@@ -159,6 +161,14 @@ internal fun FollowRelationDto.toDomain(): FollowRelation =
     FollowRelation(
         sourceFeedID = sourceFeedID.toFeedID(),
         targetFeedID = targetFeedID.toFeedID(),
+    )
+
+internal fun UserDto.toDomain(): User =
+    User(
+        id = id,
+        data = data,
+        followersCount = followersCount ?: 0,
+        followingCount = followingCount ?: 0
     )
 
 internal fun AggregatedActivitiesGroupResponse.toDomain(enrich: Boolean): List<AggregatedActivitiesGroup> =
