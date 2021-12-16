@@ -49,6 +49,17 @@ internal data class CollectionRequest(
 )
 
 @JsonClass(generateAdapter = true)
+internal data class UserRequest(
+    @Json(name = "id") val id: String,
+    @Json(name = "data") val data: Map<String, Any>,
+)
+
+@JsonClass(generateAdapter = true)
+internal data class UpdateUserRequest(
+    @Json(name = "data") val data: Map<String, Any>,
+)
+
+@JsonClass(generateAdapter = true)
 internal data class ReactionRequest(
     @Json(name = "kind") val kind: String,
     @Json(name = "activity_id") val activityId: String,
