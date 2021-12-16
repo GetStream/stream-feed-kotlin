@@ -5,6 +5,13 @@ data class FeedID(
     val userID: String,
 )
 
+data class User(
+    val id: String,
+    val data: Map<String, Any> = emptyMap(),
+    val followersCount: Int,
+    val followingCount: Int,
+)
+
 class Actor(
     val id: String,
     val data: Map<String, Any> = emptyMap(),
