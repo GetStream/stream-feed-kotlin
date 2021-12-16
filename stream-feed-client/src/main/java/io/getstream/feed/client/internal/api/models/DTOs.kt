@@ -84,6 +84,14 @@ internal data class ReactionDto(
     @Json(name = "target_feeds_extra_data") val targetFeedsExtraData: Map<String, Any>?
 )
 
+@JsonClass(generateAdapter = true)
+internal data class UserDto(
+    @Json(name = "id") val id: String,
+    @Json(name = "data") val data: Map<String, Any>,
+    @Json(name = "followers_count") val followersCount: Int?,
+    @Json(name = "following_count") val followingCount: Int?,
+)
+
 internal abstract class CustomExtraDTOs {
     abstract val extraData: MutableMap<String, Any>
 }
