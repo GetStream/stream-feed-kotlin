@@ -64,6 +64,31 @@ class FindActivitiesParams {
     }
 }
 
+class FindUserParams {
+    lateinit var userId: String
+    var withFollowCount: Boolean = false
+
+    internal val isInitialized: Boolean
+        get() = this::userId.isInitialized
+}
+
+class UserParams {
+    lateinit var userId: String
+    var data: Map<String, Any> = emptyMap()
+    var getOrCreate: Boolean = false
+
+    internal val isInitialized: Boolean
+        get() = this::userId.isInitialized
+}
+
+class UpdateUserParams {
+    lateinit var userId: String
+    var data: Map<String, Any> = emptyMap()
+
+    internal val isInitialized: Boolean
+        get() = this::userId.isInitialized
+}
+
 class UpdateReactionParams {
     lateinit var reactionId: String
     var data: Map<String, Any> = emptyMap()
