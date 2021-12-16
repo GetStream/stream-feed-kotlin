@@ -8,6 +8,7 @@ import io.getstream.feed.client.EmptyParamError
 import io.getstream.feed.client.FeedActivity
 import io.getstream.feed.client.FilterReactionsParams
 import io.getstream.feed.client.FindActivitiesParams
+import io.getstream.feed.client.FindUserParams
 import io.getstream.feed.client.FollowParams
 import io.getstream.feed.client.FollowedParams
 import io.getstream.feed.client.FollowersParams
@@ -25,6 +26,8 @@ import io.getstream.feed.client.UpdateActivityByForeignIdParams
 import io.getstream.feed.client.UpdateActivityByIdParams
 import io.getstream.feed.client.UpdateActivityParams
 import io.getstream.feed.client.UpdateReactionParams
+import io.getstream.feed.client.UpdateUserParams
+import io.getstream.feed.client.UserParams
 
 internal fun GetActivitiesParams.validate(): Either<ParamError, GetActivitiesParams> = when {
     limit < 0 -> NegativeParamError("limit can't be negative").left()
@@ -124,5 +127,20 @@ internal fun FilterReactionsParams.validate(): Either<ParamError, FilterReaction
 
 internal fun UpdateReactionParams.validate(): Either<ParamError, UpdateReactionParams> = when {
     !isInitialized -> EmptyParamError("reactionId property need to be initialized").left()
+    else -> this.right()
+}
+
+internal fun UserParams.validate(): Either<ParamError, UserParams> = when {
+    !isInitialized -> EmptyParamError("userId property need to be initialized").left()
+    else -> this.right()
+}
+
+internal fun UpdateUserParams.validate(): Either<ParamError, UpdateUserParams> = when {
+    !isInitialized -> EmptyParamError("userId property need to be initialized").left()
+    else -> this.right()
+}
+
+internal fun FindUserParams.validate(): Either<ParamError, FindUserParams> = when {
+    !isInitialized -> EmptyParamError("userId property need to be initialized").left()
     else -> this.right()
 }
