@@ -9,6 +9,9 @@ import io.getstream.feed.client.internal.api.models.UpdateActivityByIdRequest
 import io.getstream.feed.client.internal.api.models.UpdateActivityRequest
 import java.lang.reflect.Type
 
+/**
+ * A [JsonAdapter.Factory] which provide [JsonAdapter] to serialize/deserialize [UpdateActivityRequest] entities.
+ */
 internal object UpdateActivityBodyAdapterFactory : JsonAdapter.Factory {
     override fun create(type: Type, annotations: MutableSet<out Annotation>, moshi: Moshi): JsonAdapter<*>? =
         when (type) {
@@ -16,6 +19,9 @@ internal object UpdateActivityBodyAdapterFactory : JsonAdapter.Factory {
             else -> null
         }
 
+    /**
+     * A [JsonAdapter] to serialize/deserialize [UpdateActivityRequest] entities.
+     */
     private class UpdateActivityBodyAdapter(private val moshi: Moshi) : JsonAdapter<UpdateActivityRequest>() {
         override fun fromJson(reader: JsonReader): UpdateActivityRequest? {
             reader.readJsonValue()

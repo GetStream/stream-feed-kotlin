@@ -12,11 +12,23 @@ import io.getstream.feed.client.internal.toDomain
 import io.getstream.feed.client.internal.toStringFeedID
 import io.getstream.feed.client.internal.validate
 
+/**
+ * Client that allows you to work with Feed.
+ *
+ * @property feedApi The Feed endpoint.
+ * @property feedID The Feed Id.
+ */
 abstract class Feed internal constructor(
     private val feedApi: FeedApi,
     private val feedID: FeedID,
 ) {
 
+    /**
+     * Add activities.
+     *
+     * @param activities A [List] of [FeedActivity] to be added.
+     * @return An [Either] with the added [List] of [FeedActivity] or an [StreamError].
+     */
     suspend fun addActivities(activities: List<FeedActivity>): Either<StreamError, List<FeedActivity>> = either {
         val activitiesRequest = ActivitiesRequest(
             activities = activities
@@ -33,9 +45,21 @@ abstract class Feed internal constructor(
             .bind()
     }
 
+    /**
+     * Add activity.
+     *
+     * @param activity A [FeedActivity] to be added.
+     * @return An [Either] with the added [FeedActivity] or an [StreamError].
+     */
     suspend fun addActivity(activity: FeedActivity): Either<StreamError, FeedActivity> =
         addActivities(listOf(activity)).map(List<FeedActivity>::first)
 
+    /**
+     * Follow a Feed.
+     *
+     * @param params A function over [FollowParams] that defines params to be used.
+     * @return An [Either] with the [Unit] if the feed was followed or an [StreamError].
+     */
     suspend fun follow(params: FollowParams.() -> Unit = {}): Either<StreamError, Unit> =
         either {
             val followRequest: FollowRequest = FollowParams()
@@ -51,6 +75,12 @@ abstract class Feed internal constructor(
                 .bind()
         }
 
+    /**
+     * Follow a Feed.
+     *
+     * @param params A function over [UnfollowParams] that defines params to be used.
+     * @return An [Either] with the [Unit] if the feed was unfollowed or an [StreamError].
+     */
     suspend fun unfollow(params: UnfollowParams.() -> Unit = {}): Either<StreamError, Unit> =
         either {
             val unfollowParams: UnfollowParams = UnfollowParams()
@@ -66,6 +96,12 @@ abstract class Feed internal constructor(
                 .bind()
         }
 
+    /**
+     * Get followed of a Feed.
+     *
+     * @param params A function over [FollowedParams] that defines params to be used.
+     * @return An [Either] with a [List] of [FollowRelation] or an [StreamError].
+     */
     suspend fun followed(params: FollowedParams.() -> Unit): Either<StreamError, List<FollowRelation>> =
         either {
             val followedParams = FollowedParams()
@@ -82,6 +118,12 @@ abstract class Feed internal constructor(
                 .bind()
         }
 
+    /**
+     * Get followers of a Feed.
+     *
+     * @param params A function over [FollowersParams] that defines params to be used.
+     * @return An [Either] with a [List] of [FollowRelation] or an [StreamError].
+     */
     suspend fun followers(params: FollowersParams.() -> Unit): Either<StreamError, List<FollowRelation>> =
         either {
             val followersParams = FollowersParams()
@@ -98,6 +140,12 @@ abstract class Feed internal constructor(
                 .bind()
         }
 
+    /**
+     * Remove an activity.
+     *
+     * @param params A function over [RemoveActivityParams] that defines params to be used.
+     * @return An [Either] with the [Unit] if the collection was deleted or an [StreamError].
+     */
     suspend fun removeActivity(params: RemoveActivityParams): Either<StreamError, Unit> =
         either {
             val removeActivityParams: RemoveActivityParams = params.validate().bind()

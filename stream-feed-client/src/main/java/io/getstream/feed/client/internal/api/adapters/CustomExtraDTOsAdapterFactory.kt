@@ -9,7 +9,11 @@ import com.squareup.moshi.rawType
 import io.getstream.feed.client.internal.api.models.CustomExtraDTOs
 import java.lang.reflect.Type
 
-object CustomExtraDTOsAdapterFactory : JsonAdapter.Factory {
+/**
+ * A [JsonAdapter.Factory] which provides [JsonAdapter] to serialize/deserialize [CustomExtraDTOs] entities.
+ * This adapter delegate serialize/deserialize process to an adapter of the concrete type processing the extraData value.
+ */
+internal object CustomExtraDTOsAdapterFactory : JsonAdapter.Factory {
     override fun create(type: Type, annotations: MutableSet<out Annotation>, moshi: Moshi): JsonAdapter<*>? =
         when {
             CustomExtraDTOs::class.java.isAssignableFrom(type.rawType) ->
@@ -20,6 +24,16 @@ object CustomExtraDTOsAdapterFactory : JsonAdapter.Factory {
             else -> null
         }
 
+    /**
+     * A [JsonAdapter] to serialize/deserialize entities that extend [CustomExtraDTOs].
+     * The process to serialize/deserialize take two steps. First one is to serialize/deserialize it to a [Map] to be
+     * able to obtain all extraData values. Second step is to use a new [JsonAdapter] used to delegate this process
+     * to serialize/deserialize concretes entities.
+     *
+     * @property mapAdapter used to serialize/deserialize [Map].
+     * @property delegateJsonAdapter used to serialize/deserialize concrete entities. This [JsonAdapter] shouldn't
+     * contain a [CustomExtraDTOsJsonAdapter].
+     */
     private class CustomExtraDTOsJsonAdapter(
         private val mapAdapter: JsonAdapter<MutableMap<String, Any?>>,
         private val delegateJsonAdapter: JsonAdapter<Any>,

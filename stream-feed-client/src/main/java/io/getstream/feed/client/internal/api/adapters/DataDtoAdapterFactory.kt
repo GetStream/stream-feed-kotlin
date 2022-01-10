@@ -9,7 +9,11 @@ import com.squareup.moshi.rawType
 import io.getstream.feed.client.internal.api.models.DataDto
 import java.lang.reflect.Type
 
-object DataDtoAdapterFactory : JsonAdapter.Factory {
+/**
+ * A [JsonAdapter.Factory] which provide [JsonAdapter] to serialize/deserialize [DataDto] entities.
+ * The json data received could be an String or a json object, and both needs to be converted to [DataDto].
+ */
+internal object DataDtoAdapterFactory : JsonAdapter.Factory {
     override fun create(type: Type, annotations: MutableSet<out Annotation>, moshi: Moshi): JsonAdapter<*>? =
         when {
             DataDto::class.java.isAssignableFrom(type.rawType) ->
@@ -20,6 +24,13 @@ object DataDtoAdapterFactory : JsonAdapter.Factory {
             else -> null
         }
 
+    /**
+     * A [JsonAdapter] to serialize/deserialize [DataDto] entities.
+     * The json data received could be an String or a json object, and both needs to be converted to [DataDto].
+     *
+     * @property stringAdapter used to serialize/deserialize the `id` when it is received as a [String].
+     * @property mapAdapter used to serialize/deserialize [DataDto] when it is received as a Json Object.
+     */
     private class DataDtoJsonAdapter(
         private val stringAdapter: JsonAdapter<String>,
         private val mapAdapter: JsonAdapter<MutableMap<String, Any?>>,

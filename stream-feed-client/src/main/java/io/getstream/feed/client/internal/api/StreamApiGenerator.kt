@@ -9,6 +9,19 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
+/**
+ * A class that provides all needed endpoints.
+ *
+ * @property apiKey Stream Feed API Key to be used on every requests.
+ * @property userToken Token that authorizes requests.
+ * @property flatFeedApi The Flat Feed endpoints.
+ * @property notificationFeedApi The Notification Feed endpoints.
+ * @property aggregatedFeedApi The Aggregated Feed endpoints.
+ * @property activityApi The Activity endpoints.
+ * @property collectionsApi The collections endpoints.
+ * @property reactionApi The reactions endpoints.
+ * @property userApi The user endpoints.
+ */
 internal class StreamApiGenerator(
     private val apiKey: String,
     private val userToken: String,
@@ -29,6 +42,9 @@ internal class StreamApiGenerator(
             .build()
     }
 
+    /**
+     * Provides version of the SDK. It is obtained from MetaData injected by Gradle Build Script.
+     */
     private fun getVersion(): String = "stream-feed-kotlin-${this::class.java.`package`.implementationVersion}"
 
     val flatFeedApi: FlatFeedApi by lazy { retrofit.create(FlatFeedApi::class.java) }

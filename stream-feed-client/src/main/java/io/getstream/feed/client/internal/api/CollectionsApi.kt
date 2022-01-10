@@ -10,6 +10,9 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
+/**
+ * API to be used with Retrofit to provide Collections Endpoints.
+ */
 internal interface CollectionsApi {
 
     @POST("/api/v1.0/collections/{collectionName}")

@@ -5,6 +5,9 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import java.lang.reflect.Type
 
+/**
+ * A [Converter.Factory] which provides [Converter] for [CommaSeparatedQueryParams].
+ */
 internal object UrlQueryFactory : Converter.Factory() {
 
     override fun stringConverter(
@@ -17,6 +20,9 @@ internal object UrlQueryFactory : Converter.Factory() {
     }
 }
 
+/**
+ * A [Converter] which converts [CommaSeparatedQueryParams] to [String] to be used on the URL.
+ */
 internal object CommaSeparatedQueryParamsConverter : Converter<CommaSeparatedQueryParams<*>, String> {
     override fun convert(value: CommaSeparatedQueryParams<*>): String? =
         value.params

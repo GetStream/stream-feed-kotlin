@@ -10,6 +10,9 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 
+/**
+ * API to be used with Retrofit to provide Activities Endpoints.
+ */
 internal interface ActivityApi {
 
     @GET("/api/v1.0/enrich/activities")

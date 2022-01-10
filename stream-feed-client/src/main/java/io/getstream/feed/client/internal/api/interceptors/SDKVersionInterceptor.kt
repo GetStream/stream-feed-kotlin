@@ -5,9 +5,10 @@ import okhttp3.Response
 import java.io.IOException
 
 /**
- * An OkHttp interceptor which add the SDK Version when requesting to Stream Server. Can be applied as an
- * [application interceptor][OkHttpClient.interceptors] or as a [OkHttpClient.networkInterceptors].
+ * An OkHttp [Interceptor] which add the SDK Version when requesting to Stream Server. Can be applied as an
+ * Normal Interceptor or as a Network Interceptor.
  *
+ * @property sdkVersion is the SDK Version of Stream Feed SDK.
  */
 internal class SDKVersionInterceptor(private val sdkVersion: String) : Interceptor {
 
