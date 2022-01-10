@@ -7,16 +7,28 @@ import io.getstream.feed.client.internal.obtainEntity
 import io.getstream.feed.client.internal.toDomain
 import io.getstream.feed.client.internal.validate
 
+/**
+ * Client that allows you to work with Notification Feed.
+ *
+ * @property notificationFeedApi The notification feed endpoint.
+ * @property feedID The Notification Feed Id.
+ */
 class NotificationFeed internal constructor(
-    private val feedApi: NotificationFeedApi,
+    private val notificationFeedApi: NotificationFeedApi,
     private val feedID: FeedID,
 ) {
 
+    /**
+     * Obtain activities that match the given params.
+     *
+     * @param params A function over [GetActivitiesParams] that defines params to be used.
+     * @return An [Either] with the [List] of [NotificationActivitiesGroup] found or an [StreamError].
+     */
     suspend fun getActivities(params: GetActivitiesParams.() -> Unit = {}): Either<StreamError, List<NotificationActivitiesGroup>> =
         either {
             val getActivitiesParams = GetActivitiesParams().apply(params).validate().bind()
             when (getActivitiesParams.enrich) {
-                true -> feedApi.activities(
+                true -> notificationFeedApi.activities(
                     slug = feedID.slug,
                     id = feedID.userID,
                     limit = getActivitiesParams.limit,
@@ -30,7 +42,7 @@ class NotificationFeed internal constructor(
                     withReactionCounts = getActivitiesParams.withReactionCounts,
                     recentReactionsLimit = getActivitiesParams.recentReactionsLimit,
                 )
-                false -> feedApi.enrichActivities(
+                false -> notificationFeedApi.enrichActivities(
                     slug = feedID.slug,
                     id = feedID.userID,
                     limit = getActivitiesParams.limit,

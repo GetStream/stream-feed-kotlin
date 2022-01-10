@@ -5,9 +5,10 @@ import okhttp3.Response
 import java.io.IOException
 
 /**
- * An OkHttp interceptor which add the API Key needed for requesting to Stream Server. Can be applied as an
- * [application interceptor][OkHttpClient.interceptors] or as a [OkHttpClient.networkInterceptors].
+ * An OkHttp [Interceptor] which adds the API Key needed for requesting to Stream Server. Can be applied as a
+ * Normal Interceptor or as a Network Interceptor.
  *
+ * @property apiKey is the Stream Feeds API Key to be injected on all requests.
  */
 internal class ApiKeyInterceptor(private val apiKey: String) : Interceptor {
 

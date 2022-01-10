@@ -5,9 +5,11 @@ import okhttp3.Response
 import java.io.IOException
 
 /**
- * An OkHttp interceptor which add the Authorization token needed for requesting to Stream Server. Can be applied as an
- * [application interceptor][OkHttpClient.interceptors] or as a [OkHttpClient.networkInterceptors].
+ * An OkHttp [Interceptor] which adds the Authorization token needed for requesting to Stream Server. Can be applied as an
+ * Normal Interceptor or as a Network Interceptor.
  *
+ * @property getToken is a function that will be called everytime a token needs to be injected on a request.
+ * This function return and string with the the token to be used.
  */
 internal class TokenAuthInterceptor(
     val getToken: () -> String

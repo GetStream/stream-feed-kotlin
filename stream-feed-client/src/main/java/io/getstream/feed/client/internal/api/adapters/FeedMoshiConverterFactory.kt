@@ -8,7 +8,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.lang.reflect.Type
 
-object FeedMoshiConverterFactory : Converter.Factory() {
+/**
+ * A [Converter.Factory] which provide [Converter] to serialize/deserialize all entities used on StreamFeed SDK.
+ */
+internal object FeedMoshiConverterFactory : Converter.Factory() {
     private val moshiConverterFactory: MoshiConverterFactory by lazy { MoshiConverterFactory.create(moshi) }
     internal val moshi: Moshi by lazy {
         Moshi.Builder()

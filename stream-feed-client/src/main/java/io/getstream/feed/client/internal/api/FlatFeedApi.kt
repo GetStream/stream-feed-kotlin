@@ -6,6 +6,9 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
+/**
+ * API to be used with Retrofit to provide Flat Feed Endpoints.
+ */
 internal interface FlatFeedApi : FeedApi {
 
     @GET("/api/v1.0/enrich/feed/{slug}/{id}")

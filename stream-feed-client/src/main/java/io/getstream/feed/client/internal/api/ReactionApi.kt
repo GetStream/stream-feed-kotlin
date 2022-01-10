@@ -13,6 +13,9 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
+/**
+ * API to be used with Retrofit to provide Reaction Endpoints.
+ */
 internal interface ReactionApi {
 
     @POST("/api/v1.0/reaction/")

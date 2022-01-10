@@ -9,7 +9,10 @@ import io.getstream.feed.client.internal.api.models.DownstreamActivityDto
 import io.getstream.feed.client.internal.api.models.UpstreamActivityDto
 import java.lang.reflect.Type
 
-object ActivityAdapterFactory : JsonAdapter.Factory {
+/**
+ * A [JsonAdapter.Factory] which provide [JsonAdapter] to serialize/deserialize [ActivitySealedDto] entities.
+ */
+internal object ActivityAdapterFactory : JsonAdapter.Factory {
     override fun create(type: Type, annotations: MutableSet<out Annotation>, moshi: Moshi): JsonAdapter<*>? =
         when (type) {
             ActivitySealedDto::class.java -> ActivitySealedDtoAdapter(
@@ -19,6 +22,12 @@ object ActivityAdapterFactory : JsonAdapter.Factory {
             else -> null
         }
 
+    /**
+     * A [JsonAdapter] to serialize/deserialize [ActivitySealedDto] entities.
+     *
+     * @property downstreamActivitySealedDtoAdapter used to serialize/deserialize [DownstreamActivityDto] entities.
+     * @property upstreamActivityDtoAdapter used to serialize/deserialize [UpstreamActivityDto] entities.
+     */
     private class ActivitySealedDtoAdapter(
         private val downstreamActivitySealedDtoAdapter: JsonAdapter<DownstreamActivityDto>,
         private val upstreamActivityDtoAdapter: JsonAdapter<UpstreamActivityDto>
