@@ -1,3 +1,5 @@
+> **`stream-feed-kotlin` is no longer maintained and is archived.** It was an early Feeds client for Kotlin and never got past 0.0.1. New projects should use Feeds v3 with [`stream-feeds-android`](https://github.com/GetStream/stream-feeds-android). See https://getstream.io/activity-feeds/sdk/android/
+
 # stream-feed-kotlin
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.getstream/stream-feed-client/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/io.getstream/stream-feed-client) [![build](https://github.com/GetStream/stream-feed-kotlin/workflows/Build%20and%20test/badge.svg)](https://github.com/GetStream/stream-feed-kotlin/actions)
